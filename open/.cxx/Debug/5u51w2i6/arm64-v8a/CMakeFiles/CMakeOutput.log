@@ -1,7 +1,7 @@
 The target system is: Android - 1 - aarch64
 The host system is: Darwin - 20.6.0 - x86_64
 Determining if the C compiler works passed with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_2ae90"
 [1/2] Building C object CMakeFiles/cmTC_2ae90.dir/testCCompiler.c.o
@@ -9,7 +9,7 @@ Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninj
 
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_9bc27"
 [1/2] Building C object CMakeFiles/cmTC_9bc27.dir/CMakeCCompilerABI.c.o
@@ -23,7 +23,7 @@ InstalledDir: /Users/vkas/Library/Android/sdk/ndk/25.2.9519653/toolchains/llvm/p
 
 Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(CMAKE_LINKER-NOTFOUND|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp]
   ignore line: []
   ignore line: [Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_9bc27"]
   ignore line: [[1/2] Building C object CMakeFiles/cmTC_9bc27.dir/CMakeCCompilerABI.c.o]
@@ -83,7 +83,7 @@ Parsed C implicit link information from above output:
 
 
 Detecting C [-std=c11] compiler features compiled with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_feb59"
 [1/2] Building C object CMakeFiles/cmTC_feb59.dir/feature_tests.c.o
@@ -97,7 +97,7 @@ Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninj
 
 
 Detecting C [-std=c99] compiler features compiled with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_6b152"
 [1/2] Building C object CMakeFiles/cmTC_6b152.dir/feature_tests.c.o
@@ -111,7 +111,7 @@ Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninj
 
 
 Detecting C [-std=c90] compiler features compiled with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_37bc3"
 [1/2] Building C object CMakeFiles/cmTC_37bc3.dir/feature_tests.c.o
@@ -123,7 +123,7 @@ Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninj
     Feature record: C_FEATURE:0c_static_assert
     Feature record: C_FEATURE:0c_variadic_macros
 Determining if the CXX compiler works passed with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_75af2"
 [1/2] Building CXX object CMakeFiles/cmTC_75af2.dir/testCXXCompiler.cxx.o
@@ -131,7 +131,7 @@ Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninj
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_ae653"
 [1/2] Building CXX object CMakeFiles/cmTC_ae653.dir/CMakeCXXCompilerABI.cpp.o
@@ -145,7 +145,7 @@ InstalledDir: /Users/vkas/Library/Android/sdk/ndk/25.2.9519653/toolchains/llvm/p
 
 Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(CMAKE_LINKER-NOTFOUND|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
-  ignore line: [Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp]
+  ignore line: [Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp]
   ignore line: []
   ignore line: [Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_ae653"]
   ignore line: [[1/2] Building CXX object CMakeFiles/cmTC_ae653.dir/CMakeCXXCompilerABI.cpp.o]
@@ -209,7 +209,7 @@ Parsed CXX implicit link information from above output:
 
 
 Detecting CXX [-std=c++1z] compiler features compiled with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_6dff4"
 [1/2] Building CXX object CMakeFiles/cmTC_6dff4.dir/feature_tests.cxx.o
@@ -276,7 +276,7 @@ Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninj
 
 
 Detecting CXX [-std=c++14] compiler features compiled with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_aeb11"
 [1/2] Building CXX object CMakeFiles/cmTC_aeb11.dir/feature_tests.cxx.o
@@ -343,7 +343,7 @@ Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninj
 
 
 Detecting CXX [-std=c++11] compiler features compiled with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_4fb9a"
 [1/2] Building CXX object CMakeFiles/cmTC_4fb9a.dir/feature_tests.cxx.o
@@ -410,7 +410,7 @@ Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninj
 
 
 Detecting CXX [-std=c++98] compiler features compiled with the following output:
-Change Dir: /Users/vkas/AndroidStudioProjects/TheSecondDualAgreement/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
+Change Dir: /Users/vkas/AndroidStudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/5u51w2i6/arm64-v8a/CMakeFiles/CMakeTmp
 
 Run Build Command:"/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja" "cmTC_90ff0"
 [1/2] Building CXX object CMakeFiles/cmTC_90ff0.dir/feature_tests.cxx.o

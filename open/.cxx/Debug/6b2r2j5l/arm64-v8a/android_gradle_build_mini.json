@@ -1,19 +1,19 @@
 {
   "buildFiles": [
-    "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/src/main/cpp/CMakeLists.txt"
+    "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/src/main/cpp/CMakeLists.txt"
   ],
   "cleanCommandsComponents": [
     [
       "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
       "-C",
-      "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+      "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
       "clean"
     ]
   ],
   "buildTargetsCommandComponents": [
     "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
     "-C",
-    "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+    "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
     "{LIST_OF_TARGETS_TO_BUILD}"
   ],
   "libraries": {
@@ -22,11 +22,11 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "ovpn3"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libovpn3.so",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libovpn3.so",
       "runtimeFiles": []
     },
     "libovpnexec.so-Debug-arm64-v8a": {
@@ -34,13 +34,13 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "libovpnexec.so"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libovpnexec.so",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libovpnexec.so",
       "runtimeFiles": [
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libopenvpn.so"
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libopenvpn.so"
       ]
     },
     "lzo-Debug-arm64-v8a": {
@@ -48,11 +48,11 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "lzo"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a/liblzo.a",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a/liblzo.a",
       "runtimeFiles": []
     },
     "ssl-Debug-arm64-v8a": {
@@ -60,11 +60,11 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "ssl"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a/libssl.a",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a/libssl.a",
       "runtimeFiles": []
     },
     "crypto-Debug-arm64-v8a": {
@@ -72,11 +72,11 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "crypto"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a/libcrypto.a",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a/libcrypto.a",
       "runtimeFiles": []
     },
     "osslutil-Debug-arm64-v8a": {
@@ -84,11 +84,11 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "osslutil"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libosslutil.so",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libosslutil.so",
       "runtimeFiles": []
     },
     "lz4-Debug-arm64-v8a": {
@@ -96,11 +96,11 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "lz4"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a/liblz4.a",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a/liblz4.a",
       "runtimeFiles": []
     },
     "pie_openvpn.arm64-v8a-Debug-arm64-v8a": {
@@ -108,13 +108,13 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "pie_openvpn.arm64-v8a"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/pie_openvpn.arm64-v8a",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/pie_openvpn.arm64-v8a",
       "runtimeFiles": [
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libopenvpn.so"
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libopenvpn.so"
       ]
     },
     "openvpn-Debug-arm64-v8a": {
@@ -122,11 +122,11 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "openvpn"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libopenvpn.so",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libopenvpn.so",
       "runtimeFiles": []
     },
     "ovpnutil-Debug-arm64-v8a": {
@@ -134,11 +134,11 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "ovpnutil"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libovpnutil.so",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libovpnutil.so",
       "runtimeFiles": []
     },
     "makeassetdir-Debug-arm64-v8a": {
@@ -146,7 +146,7 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "makeassetdir"
       ],
       "abi": "arm64-v8a",
@@ -157,11 +157,11 @@
       "buildCommandComponents": [
         "/Users/vkas/Library/Android/sdk/cmake/3.10.2.4988404/bin/ninja",
         "-C",
-        "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/.cxx/Debug/6b2r2j5l/arm64-v8a",
         "osslspeedtest"
       ],
       "abi": "arm64-v8a",
-      "output": "/Users/vkas/StudioProjects/TheSecondDualAgreement/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libosslspeedtest.so",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/open/build/intermediates/cxx/Debug/6b2r2j5l/obj/arm64-v8a/libosslspeedtest.so",
       "runtimeFiles": []
     }
   }

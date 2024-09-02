@@ -2,7 +2,7 @@ package com.two.protocol.ladders.fourth.uuuuii.zzzzzz
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.fast.open.ss.dual.agreement.R
+import com.two.protocol.ladders.fourth.R
 
 class ZZ:AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
