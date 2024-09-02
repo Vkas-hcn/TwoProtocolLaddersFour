@@ -1,0 +1,126 @@
+{
+  "buildFiles": [
+    "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Application.mk"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/vkas/Library/Android/sdk/ndk/25.1.8937393/ndk-build",
+      "NDK_PROJECT_PATH\u003dnull",
+      "APP_BUILD_SCRIPT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+      "NDK_APPLICATION_MK\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Application.mk",
+      "APP_ABI\u003dx86",
+      "NDK_ALL_ABIS\u003dx86",
+      "NDK_DEBUG\u003d1",
+      "APP_PLATFORM\u003dandroid-23",
+      "NDK_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj",
+      "NDK_LIBS_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/lib",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/vkas/Library/Android/sdk/ndk/25.1.8937393/ndk-build",
+    "NDK_PROJECT_PATH\u003dnull",
+    "APP_BUILD_SCRIPT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "NDK_APPLICATION_MK\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Application.mk",
+    "APP_ABI\u003dx86",
+    "NDK_ALL_ABIS\u003dx86",
+    "NDK_DEBUG\u003d1",
+    "APP_PLATFORM\u003dandroid-23",
+    "NDK_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj",
+    "NDK_LIBS_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/lib",
+    "-j8",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "ancillary-debug-x86": {
+      "buildCommandComponents": [
+        "/Users/vkas/Library/Android/sdk/ndk/25.1.8937393/ndk-build",
+        "NDK_PROJECT_PATH\u003dnull",
+        "APP_BUILD_SCRIPT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+        "NDK_APPLICATION_MK\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Application.mk",
+        "APP_ABI\u003dx86",
+        "NDK_ALL_ABIS\u003dx86",
+        "NDK_DEBUG\u003d1",
+        "APP_PLATFORM\u003dandroid-23",
+        "NDK_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj",
+        "NDK_LIBS_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/lib",
+        "-j8",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj/local/x86/libancillary.a"
+      ],
+      "toolchain": "toolchain-x86",
+      "abi": "x86",
+      "artifactName": "ancillary",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj/local/x86/libancillary.a"
+    },
+    "event-debug-x86": {
+      "buildCommandComponents": [
+        "/Users/vkas/Library/Android/sdk/ndk/25.1.8937393/ndk-build",
+        "NDK_PROJECT_PATH\u003dnull",
+        "APP_BUILD_SCRIPT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+        "NDK_APPLICATION_MK\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Application.mk",
+        "APP_ABI\u003dx86",
+        "NDK_ALL_ABIS\u003dx86",
+        "NDK_DEBUG\u003d1",
+        "APP_PLATFORM\u003dandroid-23",
+        "NDK_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj",
+        "NDK_LIBS_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/lib",
+        "-j8",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj/local/x86/libevent.a"
+      ],
+      "toolchain": "toolchain-x86",
+      "abi": "x86",
+      "artifactName": "event",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj/local/x86/libevent.a"
+    },
+    "redsocks-debug-x86": {
+      "buildCommandComponents": [
+        "/Users/vkas/Library/Android/sdk/ndk/25.1.8937393/ndk-build",
+        "NDK_PROJECT_PATH\u003dnull",
+        "APP_BUILD_SCRIPT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+        "NDK_APPLICATION_MK\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Application.mk",
+        "APP_ABI\u003dx86",
+        "NDK_ALL_ABIS\u003dx86",
+        "NDK_DEBUG\u003d1",
+        "APP_PLATFORM\u003dandroid-23",
+        "NDK_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj",
+        "NDK_LIBS_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/lib",
+        "-j8",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj/local/x86/libredsocks.so"
+      ],
+      "toolchain": "toolchain-x86",
+      "abi": "x86",
+      "artifactName": "redsocks",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj/local/x86/libredsocks.so"
+    },
+    "tun2socks-debug-x86": {
+      "buildCommandComponents": [
+        "/Users/vkas/Library/Android/sdk/ndk/25.1.8937393/ndk-build",
+        "NDK_PROJECT_PATH\u003dnull",
+        "APP_BUILD_SCRIPT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+        "NDK_APPLICATION_MK\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Application.mk",
+        "APP_ABI\u003dx86",
+        "NDK_ALL_ABIS\u003dx86",
+        "NDK_DEBUG\u003d1",
+        "APP_PLATFORM\u003dandroid-23",
+        "NDK_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj",
+        "NDK_LIBS_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/lib",
+        "-j8",
+        "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj/local/x86/libtun2socks.so"
+      ],
+      "toolchain": "toolchain-x86",
+      "abi": "x86",
+      "artifactName": "tun2socks",
+      "output": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj/local/x86/libtun2socks.so"
+    }
+  },
+  "toolchains": {
+    "toolchain-x86": {
+      "cCompilerExecutable": "/Users/vkas/Library/Android/sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": []
+}

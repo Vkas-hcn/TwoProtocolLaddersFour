@@ -1,0 +1,156 @@
+[
+  {
+    "level_": 0,
+    "message_": "Start JSON generation. Platform version: 23 min SDK version: x86",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1962670395
+  },
+  {
+    "level_": 0,
+    "message_": "rebuilding JSON /Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/.cxx/Debug/5p665k2u/x86/android_gradle_build.json due to:",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -656000681
+  },
+  {
+    "level_": 0,
+    "message_": "- no fingerprint file, will remove stale configuration folder",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -1751622794
+  },
+  {
+    "level_": 0,
+    "message_": "removing stale contents from \u0027/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/.cxx/Debug/5p665k2u/x86\u0027",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 212762304
+  },
+  {
+    "level_": 0,
+    "message_": "created folder \u0027/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/.cxx/Debug/5p665k2u/x86\u0027",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1429563188
+  },
+  {
+    "level_": 0,
+    "message_": "executing ndkBuild /Users/vkas/Library/Android/sdk/ndk/25.1.8937393/ndk-build \\\n  NDK_PROJECT_PATH\u003dnull \\\n  APP_BUILD_SCRIPT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk \\\n  NDK_APPLICATION_MK\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Application.mk \\\n  APP_ABI\u003dx86 \\\n  NDK_ALL_ABIS\u003dx86 \\\n  NDK_DEBUG\u003d1 \\\n  APP_PLATFORM\u003dandroid-23 \\\n  NDK_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj \\\n  NDK_LIBS_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/lib \\\n  -j8 \\\n  APP_SHORT_COMMANDS\u003dfalse \\\n  LOCAL_SHORT_COMMANDS\u003dfalse \\\n  -B \\\n  -n\n",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1364154308
+  },
+  {
+    "level_": 0,
+    "message_": "/Users/vkas/Library/Android/sdk/ndk/25.1.8937393/ndk-build \\\n  NDK_PROJECT_PATH\u003dnull \\\n  APP_BUILD_SCRIPT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk \\\n  NDK_APPLICATION_MK\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Application.mk \\\n  APP_ABI\u003dx86 \\\n  NDK_ALL_ABIS\u003dx86 \\\n  NDK_DEBUG\u003d1 \\\n  APP_PLATFORM\u003dandroid-23 \\\n  NDK_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/obj \\\n  NDK_LIBS_OUT\u003d/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/build/intermediates/cxx/Debug/5p665k2u/lib \\\n  -j8 \\\n  APP_SHORT_COMMANDS\u003dfalse \\\n  LOCAL_SHORT_COMMANDS\u003dfalse \\\n  -B \\\n  -n\n",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1968116433
+  },
+  {
+    "level_": 0,
+    "message_": "parse and convert ndk-build output to build configuration JSON",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": -1111804080
+  },
+  {
+    "level_": 0,
+    "message_": "found application make file /Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Application.mk",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 1341622141
+  },
+  {
+    "level_": 0,
+    "message_": "done executing ndkBuild",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 753042486
+  },
+  {
+    "level_": 0,
+    "message_": "JSON generation completed without problems",
+    "file_": "/Users/vkas/StudioProjects/TwoProtocolLaddersFour/core/src/main/jni/Android.mk",
+    "tag_": "debug|x86",
+    "diagnosticCode_": 0,
+    "memoizedIsInitialized": 1,
+    "unknownFields": {
+      "fields": {},
+      "fieldsDescending": {}
+    },
+    "memoizedSize": -1,
+    "memoizedHashCode": 2071406066
+  }
+]

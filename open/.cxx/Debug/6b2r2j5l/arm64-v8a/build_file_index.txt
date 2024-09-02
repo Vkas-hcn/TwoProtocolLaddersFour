@@ -1,0 +1,1 @@
+/Users/vkas/StudioProjects/TheSecondDualAgreement/open/src/main/cpp/CMakeLists.txt
