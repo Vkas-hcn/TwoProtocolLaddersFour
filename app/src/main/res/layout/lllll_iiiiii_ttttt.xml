@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/main_btn"
+    android:gravity="center"
+    android:layout_marginBottom="12dp"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="12dp">
+
+    <ImageView
+        android:id="@+id/img_flag"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/fast" />
+
+    <TextView
+        android:id="@+id/tv_cou"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:text="Taiwan"
+        android:textColor="#FFFFFFFF"
+        android:textSize="16sp" />
+
+    <ImageView
+        android:id="@+id/img_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/list_dis" />
+</LinearLayout>
+

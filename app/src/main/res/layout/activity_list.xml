@@ -4,17 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View" />
 
-        <variable
-            name="showList"
-            type="Boolean"
-            android:value="false" />
-
-        <variable
-            name="showLoading"
-            type="Boolean"
-            android:value="false" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,98 +12,36 @@
         android:layout_height="match_parent"
         android:background="@drawable/bg_main">
 
-        <ImageView
-            android:id="@+id/img_back"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_back"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/main_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="40dp"
+            android:src="@drawable/list_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_title"
+        <TextView
+            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Server"
-            android:textColor="#FF333333"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/img_back"
+            android:text="Select Server"
+            android:textColor="#FFFFFFFF"
+            android:textSize="17sp"
+            app:layout_constraintBottom_toBottomOf="@+id/main_menu"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/img_back" />
+            app:layout_constraintTop_toTopOf="@+id/main_menu" />
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_service"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical"
-            android:background="@drawable/bg_list"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginTop="16dp"
-            android:paddingTop="30dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:visibility="@{showList ? View.VISIBLE : View.GONE}"
+            tools:listitem="@layout/lllll_iiiiii_ttttt"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_back">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:text="Change servers"
-                android:textColor="#FF333333"
-                android:textSize="16sp"
-                />
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_list"
-                android:layout_marginTop="22dp"
-                android:layout_weight="1"
-                android:layout_width="match_parent"
-                tools:listitem="@layout/item_service"
-                android:layout_height="0dp"/>
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_no_data"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:text="No Data"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:visibility="@{showList ? View.GONE : View.VISIBLE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_back"/>
-        <LinearLayout
-            android:id="@+id/ll_loading"
-            android:layout_width="168dp"
-            android:layout_height="130dp"
-            android:background="@drawable/bg_loading"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:visibility="@{showLoading ? View.VISIBLE : View.GONE}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <ImageView
-                android:id="@+id/img_load"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:src="@drawable/ic_connecting" />
-
-            <TextView
-                android:id="@+id/tv_load"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Ad coming soon"
-                android:textColor="#FF333333"
-                android:textSize="14sp" />
-        </LinearLayout>
-
+            app:layout_constraintTop_toBottomOf="@+id/textView4" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

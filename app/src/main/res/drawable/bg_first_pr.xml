@@ -2,7 +2,8 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@android:id/background">
         <shape android:shape="rectangle">
-            <solid android:color="@color/white" />
+            <solid android:color="#1F264F" />
+            <corners android:radius="2dp" />
         </shape>
     </item>
     <item android:id="@android:id/progress">
@@ -10,7 +11,12 @@
             android:clipOrientation="horizontal"
             android:gravity="left">
             <shape>
-                <solid android:color="#FFD400" />
+                <gradient
+                    android:angle="180"
+                    android:endColor="#325FFF"
+                    android:startColor="#C1CFFF" />
+
+                <corners android:radius="2dp" />
             </shape>
         </clip>
     </item>

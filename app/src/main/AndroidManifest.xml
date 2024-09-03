@@ -24,7 +24,7 @@
             android:value="@string/google_ad_id" />
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
         <activity
-            android:name="com.two.protocol.ladders.fourth.uuuuii.zzzzzz.ZZ"
+            android:name=".uuuuii.gggguu.GG"
             android:exported="true"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
@@ -34,7 +34,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".uuuuii.zzzzzz.ZZ"
+            android:exported="true"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
