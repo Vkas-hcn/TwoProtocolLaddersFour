@@ -16,11 +16,11 @@ import android.os.Build;
 
 import android.os.StrictMode;
 import android.os.strictmode.Violation;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
-import com.tencent.mmkv.MMKV;
 
 import java.util.concurrent.Executors;
 
@@ -36,13 +36,11 @@ public class ICSOpenVPNApplication extends Application {
         if (BuildConfig.BUILD_TYPE.equals("debug"))
             enableStrictModes();
 
-        if("robolectric".equals(Build.FINGERPRINT))
+        if ("robolectric".equals(Build.FINGERPRINT))
             return;
 
         LocaleHelper.setDesiredLocale(this);
         super.onCreate();
-        MMKV.initialize(this);
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
             createNotificationChannels();
         mStatus = new StatusListener();
@@ -60,7 +58,6 @@ public class ICSOpenVPNApplication extends Application {
         StrictMode.ThreadPolicy.Builder tpbuilder = new StrictMode.ThreadPolicy.Builder()
                 .detectAll()
                 .penaltyLog();
-
 
 
         StrictMode.VmPolicy.Builder vpbuilder = new StrictMode.VmPolicy.Builder()

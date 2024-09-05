@@ -11,5 +11,7 @@
     <color name="color_9">#999999</color>
     <color name="color_3">#333333</color>
     <color name="color_connect">#4EBD12</color>
+    <color name="pro_check">#40DDFF</color>
+    <color name="pro_dis_check">#454C7B</color>
 
 </resources>

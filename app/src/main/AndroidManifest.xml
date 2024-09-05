@@ -3,11 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 
     <application
-        android:name=".aaaaa.AAA"
+        android:name=".aaaaa.ZZZ"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,10 +19,19 @@
         tools:ignore="LockedOrientationActivity"
         tools:replace="android:fullBackupContent,android:label,android:name,android:theme,android:roundIcon,android:icon"
         tools:targetApi="31">
+        <provider
+            android:name=".uuutt.MyContentProvider"
+            android:authorities="com.example.mycontentprovider"
+            android:exported="true"
+            android:multiprocess="true" />
+
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="@string/google_ad_id" />
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <activity
             android:name=".uuuuii.gggguu.GG"
             android:exported="true"
@@ -34,10 +43,21 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".uuuuii.zzzzzz.ZZ"
+        <activity
+            android:name=".uuuuii.zzzzzz.ZZ"
             android:exported="true"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".uuuuii.lll.LL"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".uuuuii.eeedd.EE"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

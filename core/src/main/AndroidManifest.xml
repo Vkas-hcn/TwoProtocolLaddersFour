@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          android:installLocation="internalOnly">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
@@ -10,10 +10,9 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-                     android:maxSdkVersion="28"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+        android:maxSdkVersion="28"/>
 
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <queries>
         <intent>
             <action android:name="com.github.shadowsocks.plugin.ACTION_NATIVE_PLUGIN" />
@@ -33,11 +32,15 @@
         android:supportsRtl="true"
         android:networkSecurityConfig="@xml/network_security_config"
         android:banner="@mipmap/banner">
-
+        <provider
+            android:name="com.github.shadowsocks.MyContentProvider"
+            android:authorities="com.example.mycontentprovider"
+            android:exported="true"
+            android:multiprocess="true"/>
         <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
-                   android:value="true" />
+            android:value="true" />
         <meta-data android:name="com.google.android.backup.api_key"
-                   android:value="AEdPqrEAAAAI_zVxZthz2HDuz9toTvkYvL0L5GA-OjeUIfBeXg"/>
+            android:value="AEdPqrEAAAAI_zVxZthz2HDuz9toTvkYvL0L5GA-OjeUIfBeXg"/>
 
         <service
             android:name="com.github.shadowsocks.bg.VpnService"
@@ -80,10 +83,10 @@
             android:taskAffinity=""/>
 
         <receiver android:name="com.github.shadowsocks.BootReceiver"
-                  android:process=":bg"
-                  android:directBootAware="true"
-                  android:exported="true"
-                  android:enabled="false">
+            android:process=":bg"
+            android:directBootAware="true"
+            android:exported="true"
+            android:enabled="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
@@ -95,6 +98,6 @@
         <activity android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"/>
 
         <service android:name="androidx.room.MultiInstanceInvalidationService"
-                 android:process=":bg"/>
+            android:process=":bg"/>
     </application>
 </manifest>
