@@ -521,7 +521,7 @@ class ZZ : AppCompatActivity(),
                 val vpnNowBean =
                     Gson().fromJson(DataUser.nowServiceKey, VpnServerBean::class.java)
                 Log.e("TAG", "Vpn Service information-open: =${Gson().toJson(vpnNowBean)}")
-                val conf = this@ZZ.assets.open("fast_ippooltest.ovpn")
+                val conf = this@ZZ.assets.open("fast_190.ovpn")
                 val br = BufferedReader(InputStreamReader(conf))
                 val config = StringBuilder()
                 var line: String?
@@ -529,7 +529,7 @@ class ZZ : AppCompatActivity(),
                     line = br.readLine()
                     if (line == null) break
                     if (line.contains("remote 195", true)) {
-                        line = "remote ${vpnNowBean.ip} ${vpnNowBean.port}"
+                        line = "remote ${vpnNowBean.ip} 443"
                     }
                     config.append(line).append("\n")
                 }

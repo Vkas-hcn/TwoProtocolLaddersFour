@@ -5,45 +5,53 @@
     "smart_list": [
       {
         "mode": "open",
-        "ip": "195.234.82.34",
-        "port": 1234,
-        "password": "O6UcTwyLMDfAJqvdC5.l2hb",
+        "ip": "149.28.87.26",
+        "port": 1216,
+        "password": "H.U04mflG_e9XbzL",
         "city": "Los Angeles",
         "country_name": "United States"
       },
       {
         "mode": "open",
-        "ip": "195.234.82.35",
-        "port": 1232,
-        "password": "O6UcTwyLMDfAJqvdC5.l2hb",
-        "city": "Tokyo",
-        "country_name": "Japan"
+        "ip": "139.180.166.94",
+        "port": 1216,
+        "password": "H.U04mflG_e9XbzL",
+        "city": "Sydney",
+        "country_name": "Australia"
+      },
+      {
+        "mode": "open",
+        "ip": "155.138.147.26",
+        "port": 1216,
+        "password": "H.U04mflG_e9XbzL",
+        "city": "Toronto",
+        "country_name": "Canada"
       }
     ],
     "server_list": [
       {
         "mode": "open",
-        "ip": "195.234.82.34",
-        "port": 443,
-        "password": "O6UcTwyLMDfAJqvdC5.l2hb",
+        "ip": "149.28.87.26",
+        "port": 1216,
+        "password": "H.U04mflG_e9XbzL",
         "city": "Los Angeles",
         "country_name": "United States"
       },
       {
         "mode": "open",
-        "ip": "4.4.4.4",
-        "port": 443,
-        "password": "O6UcTwyLMDfAJqvdC5.l2hb",
-        "city": "Singapore",
-        "country_name": "Singapore"
+        "ip": "139.180.166.94",
+        "port": 1216,
+        "password": "H.U04mflG_e9XbzL",
+        "city": "Sydney",
+        "country_name": "Australia"
       },
       {
         "mode": "open",
-        "ip": "115.224.12.24",
-        "port": 443,
-        "password": "O6UcTwyLMDfAJqvdC5.l2hb",
-        "city": "Sydney",
-        "country_name": "Australia"
+        "ip": "155.138.147.26",
+        "port": 1216,
+        "password": "H.U04mflG_e9XbzL",
+        "city": "Toronto",
+        "country_name": "Canada"
       }
     ]
   }
