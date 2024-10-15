@@ -115,19 +115,19 @@ object NetOnInfo {
     }
 
     fun showDueDialog(context: Context): Boolean {
-        if (shouldIntercept(context)) {
-            AlertDialog.Builder(context).apply {
-                setTitle("WARN")
-                setMessage("Due to the policy reason , this service is not available in your country")
-                setPositiveButton("OK") { dialog, _ ->
-                    dialog.dismiss()
-                    exitProcess(0)
-                }
-                setCancelable(false)
-                show()
-            }
-            return true
-        }
+//        if (shouldIntercept(context)) {
+//            AlertDialog.Builder(context).apply {
+//                setTitle("WARN")
+//                setMessage("Due to the policy reason , this service is not available in your country")
+//                setPositiveButton("OK") { dialog, _ ->
+//                    dialog.dismiss()
+//                    exitProcess(0)
+//                }
+//                setCancelable(false)
+//                show()
+//            }
+//            return true
+//        }
         return false
     }
 }

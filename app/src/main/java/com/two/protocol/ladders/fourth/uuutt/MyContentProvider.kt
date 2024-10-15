@@ -14,7 +14,7 @@ import android.content.Context
 class MyContentProvider : ContentProvider() {
 
     companion object {
-        const val AUTHORITY = "com.example.mycontentprovider"
+        const val AUTHORITY = "com.forest.stable.game.video.fast.easy.mycontentprovider"
         val CONTENT_URI: Uri = Uri.parse("content://$AUTHORITY/data")
 
         const val DATA_TABLE = "data"

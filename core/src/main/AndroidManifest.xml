@@ -34,7 +34,7 @@
         android:banner="@mipmap/banner">
         <provider
             android:name="com.github.shadowsocks.MyContentProvider"
-            android:authorities="com.example.mycontentprovider"
+            android:authorities="com.forest.stable.game.video.fast.easy.mycontentprovider"
             android:exported="true"
             android:multiprocess="true"/>
         <meta-data android:name="android.webkit.WebView.EnableSafeBrowsing"
