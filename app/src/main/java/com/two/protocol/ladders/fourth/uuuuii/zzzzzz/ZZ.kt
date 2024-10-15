@@ -104,9 +104,9 @@ class ZZ : AppCompatActivity(),
         binding.linNav.setOnClickListener {
 
         }
-        binding.viewGuideLottie.setOnClickListener {
-
-        }
+//        binding.viewGuideLottie.setOnClickListener {
+//
+//        }
         binding.tvPrivacyPolicy.setOnClickListener {
             startActivity(
                 Intent(
@@ -136,9 +136,9 @@ class ZZ : AppCompatActivity(),
         binding.imgConnect.setOnClickListener {
             activeTONextVpn()
         }
-        binding.laGuide.setOnClickListener {
-            activeTONextVpn()
-        }
+//        binding.laGuide.setOnClickListener {
+//            activeTONextVpn()
+//        }
         binding.tvAuto.setOnClickListener {
             limitClickActions {
                 if (DataUser.protocolValueKey != "1" && ZZZ.saoState) {
@@ -179,11 +179,11 @@ class ZZ : AppCompatActivity(),
 
     private fun backFun() {
         onBackPressedDispatcher.addCallback(this) {
-            if (binding?.viewGuideLottie?.isVisible == true) {
-                stopConnect = true
-                activeGuide(false)
-                return@addCallback
-            }
+//            if (binding?.viewGuideLottie?.isVisible == true) {
+//                stopConnect = true
+//                activeGuide(false)
+//                return@addCallback
+//            }
             if (isConnecting()) {
                 Toast.makeText(this@ZZ, "Connecting... Please wait", Toast.LENGTH_SHORT)
                     .show()
@@ -501,18 +501,18 @@ class ZZ : AppCompatActivity(),
     }
 
     private fun activeGuide(cloneState: Boolean) {
-        Log.e(
-            "TAG",
-            "activeGuide: $cloneState==${DataUser.isCloneGuideKey}==${!ZZZ.saoState}",
-        )
-        if ((cloneState && DataUser.isCloneGuideKey == "1") && !ZZZ.saoState) {
-            binding.laGuide.isVisible = true
-            binding.viewGuideLottie.isVisible = true
-        } else {
-            binding.laGuide.isVisible = false
-            binding.viewGuideLottie.isVisible = false
-            DataUser.isCloneGuideKey = ""
-        }
+//        Log.e(
+//            "TAG",
+//            "activeGuide: $cloneState==${DataUser.isCloneGuideKey}==${!ZZZ.saoState}",
+//        )
+//        if ((cloneState && DataUser.isCloneGuideKey == "1") && !ZZZ.saoState) {
+//            binding.laGuide.isVisible = true
+//            binding.viewGuideLottie.isVisible = true
+//        } else {
+//            binding.laGuide.isVisible = false
+//            binding.viewGuideLottie.isVisible = false
+//            DataUser.isCloneGuideKey = ""
+//        }
     }
 
     private fun openVTool() {
