@@ -30,6 +30,7 @@ import com.github.shadowsocks.preference.DataStore
 import com.github.shadowsocks.preference.OnPreferenceDataStoreChangeListener
 import com.github.shadowsocks.utils.Key
 import com.google.gson.Gson
+import com.two.protocol.ladders.fourth.BuildConfig
 import com.two.protocol.ladders.fourth.R
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ
 import com.two.protocol.ladders.fourth.databinding.ActivityMainBinding
@@ -83,6 +84,7 @@ class ZZ : AppCompatActivity(),
                 showHomeAd()
             }
         }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -516,7 +518,11 @@ class ZZ : AppCompatActivity(),
                     Gson().fromJson(DataUser.nowServiceKey, VpnServerBean::class.java)
                 DataUser.connectIp = vpnNowBean.ip
                 Log.e("TAG", "Vpn Service information-open: =${Gson().toJson(vpnNowBean)}")
-                val conf = this@ZZ.assets.open("fast_ippooltest.ovpn")
+                val conf = if (BuildConfig.DEBUG) {
+                    this@ZZ.assets.open("fast_ippooltest.ovpn")
+                } else {
+                    this@ZZ.assets.open("fast_190.ovpn")
+                }
                 val br = BufferedReader(InputStreamReader(conf))
                 val config = StringBuilder()
                 var line: String?
@@ -649,7 +655,6 @@ class ZZ : AppCompatActivity(),
     }
 
     private fun showHomeAd() {
-        Log.e("TAG", "showHomeAd: ", )
         showHomeJob?.cancel()
         showHomeJob = null
         val baseAd = BaseAd.getHomeInstance()
@@ -674,7 +679,7 @@ class ZZ : AppCompatActivity(),
             while (isActive) {
                 delay(500L)
                 if (baseAd.canShowAd(this@ZZ, baseAd) == 2) {
-                    baseAd.playNativeAdvertisementFlash(this@ZZ,baseAd)
+                    baseAd.playNativeAdvertisementFlash(this@ZZ, baseAd)
                     showHomeJob?.cancel()
                     showHomeJob = null
                     break

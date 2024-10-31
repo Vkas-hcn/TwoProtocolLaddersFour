@@ -7,6 +7,7 @@ import android.net.ConnectivityManager
 import android.view.KeyEvent
 import androidx.appcompat.app.AlertDialog
 import com.google.gson.Gson
+import com.two.protocol.ladders.fourth.BuildConfig
 import com.two.protocol.ladders.fourth.R
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ
 import com.two.protocol.ladders.fourth.uuuuii.zzzzzz.ZZ
@@ -23,10 +24,16 @@ object VPNGet {
         }
         return jsonString
     }
-
+    private fun getVpnDataIsRelease(): String {
+        return if (BuildConfig.DEBUG) {
+            "servicesJson.json"
+        } else {
+            "servicesJsonRelease.json"
+        }
+    }
     fun getAllData(): MutableList<VpnServerBean>? {
         val allData = if (DataUser.ooo_tz.isNullOrBlank()) {
-            getJsonDataFromAsset(ZZZ.appContext, "servicesJson.json")
+            getJsonDataFromAsset(ZZZ.appContext, getVpnDataIsRelease())
         } else {
             DataUser.ooo_tz
         }
@@ -34,7 +41,7 @@ object VPNGet {
             Gson().fromJson(allData, VpnDataBean::class.java)
         } catch (e: Exception) {
             Gson().fromJson(
-                getJsonDataFromAsset(ZZZ.appContext, "servicesJson.json"), VpnDataBean::class.java
+                getJsonDataFromAsset(ZZZ.appContext, getVpnDataIsRelease()), VpnDataBean::class.java
             )
         }
         return try {
@@ -59,7 +66,7 @@ object VPNGet {
 
     private fun getBestData() {
         val allData = if (DataUser.ooo_tz.isNullOrBlank()) {
-            getJsonDataFromAsset(ZZZ.appContext, "servicesJson.json")
+            getJsonDataFromAsset(ZZZ.appContext, getVpnDataIsRelease())
         } else {
             DataUser.ooo_tz
         }

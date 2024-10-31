@@ -229,13 +229,21 @@ object DataUser {
     fun getAdJson(): FlashAdBean {
         val dataJson =
             if (ooo_ad.isNullOrEmpty()) {
-                local_ad_data
+                getIsRelease()
             } else {
                 ooo_ad
             }
         return runCatching {
             fromAdJson(dataJson!!)
-        }.getOrNull() ?: fromAdJson(local_ad_data)
+        }.getOrNull() ?: fromAdJson(getIsRelease())
+    }
+
+    private fun getIsRelease(): String {
+        return if (BuildConfig.DEBUG) {
+            local_ad_data
+        } else {
+            local_ad_data_formal
+        }
     }
 
     fun blockAdBlacklist(): Boolean {
@@ -253,6 +261,7 @@ object DataUser {
             }
         }
     }
+
     fun parseTwoNumbers(callback: (first: Int, second: Int) -> Unit) {
         val default = 10
         val num = getLogicJson().eed ?: ""
@@ -267,6 +276,7 @@ object DataUser {
             Log.e("TAG", msg)
         }
     }
+
     class NavigationViewOutlineProvider : ViewOutlineProvider() {
         override fun getOutline(view: View?, outline: Outline?) {
             val sView = view ?: return
@@ -280,6 +290,7 @@ object DataUser {
             )
         }
     }
+
     // 本地广告数据
     const val local_ad_data = """
 {
@@ -289,6 +300,18 @@ object DataUser {
   "ctint":"ca-app-pub-3940256099942544/1033173712x",
   "bcintserv":"ca-app-pub-3940256099942544/1033173712x",
   "bcintres":"ca-app-pub-3940256099942544/1033173712x"
+}
+    """
+
+    // 本地正式广告数据
+    const val local_ad_data_formal = """
+{
+  "open": "ca-app-pub-8116342442786555/9926869240",
+  "mnnt": "ca-app-pub-8116342442786555/9202813074",
+  "rsnt": "ca-app-pub-8116342442786555/4762172475",
+  "ctint": "ca-app-pub-8116342442786555/4068900307",
+  "bcintres": "",
+  "bcintserv": "ca-app-pub-8116342442786555/1442736969"
 }
     """
 
