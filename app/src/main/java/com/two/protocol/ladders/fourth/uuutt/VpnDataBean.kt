@@ -1,26 +1,36 @@
 package com.two.protocol.ladders.fourth.uuutt
 
 import androidx.annotation.Keep
+import com.google.gson.annotations.SerializedName
 
 @Keep
 data class VpnDataBean(
-    val code: Int,
-    val data: Data,
-    val msg: String
+    @SerializedName("orm")
+    val smart_list: List<VpnServerBean>,
+    @SerializedName("rrl")
+    val server_list: List<VpnServerBean>
 )
-@Keep
-data class Data(
-    val server_list: List<VpnServerBean>,
-    val smart_list: List<VpnServerBean>
-)
+
 @Keep
 data class VpnServerBean(
-    var city: String,
-    var country_name: String,
-    var ip: String,
+    @SerializedName("paa")
     var mode: String,
+
+    @SerializedName("ceo")
+    var city: String,
+
+    @SerializedName("ttc")
+    var country_name: String,
+
+    @SerializedName("woo")
+    var ip: String,
+
+    @SerializedName("edw")
     var port: Int,
-    var password:String,
-    var bestState:Boolean = false,
-    var checkState:Boolean = false,
+
+    @SerializedName("sne")
+    var password: String,
+
+    var bestState: Boolean = false,
+    var checkState: Boolean = false,
 )

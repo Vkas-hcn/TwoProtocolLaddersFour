@@ -1,11 +1,20 @@
 package com.two.protocol.ladders.fourth.uuutt
+
 import android.content.ContentValues
+import android.graphics.Outline
 import android.net.Uri
 import android.util.Log
+import android.view.View
+import android.view.ViewOutlineProvider
+import com.google.gson.Gson
+import com.two.protocol.ladders.fourth.BuildConfig
 import com.two.protocol.ladders.fourth.R
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ
+import com.two.protocol.ladders.fourth.ggggg.FlashAdBean
+import com.two.protocol.ladders.fourth.ggggg.FlashLogicBean
 
 object DataUser {
+    const val TAG = "TWO"
     const val ppUrl = "https://www.wanandroid.com/"
     private const val upValue = "upValue"
     private const val downValue = "downValue"
@@ -16,6 +25,65 @@ object DataUser {
     private const val isCloneGuide = "isCloneGuide"
     private const val codeCon = "codeCon"
     private const val timeEd = "timeEd"
+    private const val blockDataKey = "blockDataKey"
+    private const val postUUIDKey = "postUUIDKey"
+    private const val cmpStateKey = "cmpStateKey"
+
+    const val oooAdKey = "frst_net"
+    const val oooLjKey = "ool"
+    const val oooTzKey = "hiw"
+
+    var connectIp = ""
+    var openTypeIp = ""
+    var homeTypeIp = ""
+    var endTypeIp = ""
+    var contTypeIp = ""
+    var backEndTypeIp = ""
+    var backListTypeIp = ""
+
+    var cmpState: String
+        get() = queryData(cmpStateKey) ?: "0"
+        set(value) {
+            value.let {
+                insertData(cmpStateKey, it)
+            }
+        }
+    var postUUID: String
+        get() = queryData(postUUIDKey) ?: ""
+        set(value) {
+            value.let {
+                insertData(postUUIDKey, it)
+            }
+        }
+    var blockData: String?
+        get() = queryData(blockDataKey)
+        set(value) {
+            value?.let {
+                insertData(blockDataKey, it)
+            }
+        }
+    var ooo_ad: String?
+        get() = queryData(oooAdKey)
+        set(value) {
+            value?.let {
+                insertData(oooAdKey, it)
+            }
+        }
+    var ooo_lj: String?
+        get() = queryData(oooLjKey)
+        set(value) {
+            value?.let {
+                insertData(oooLjKey, it)
+            }
+        }
+
+    var ooo_tz: String?
+        get() = queryData(oooTzKey)
+        set(value) {
+            value?.let {
+                insertData(oooTzKey, it)
+            }
+        }
     var timeEdKey: String?
         get() = queryData(timeEd)
         set(value) {
@@ -99,6 +167,7 @@ object DataUser {
             Log.e("TAG", "Data updated successfully")
         }
     }
+
     private fun queryData(key: String): String? {
         val cursor = ZZZ.appContext.contentResolver.query(
             MyContentProvider.CONTENT_URI,
@@ -114,7 +183,8 @@ object DataUser {
         }
         return null
     }
-    fun String.getSaturnImage():  Int {
+
+    fun String.getSaturnImage(): Int {
         return when (this) {
             "United States" -> R.drawable.unitedstates
             "Australia" -> R.drawable.australia
@@ -133,4 +203,100 @@ object DataUser {
             else -> R.drawable.fast
         }
     }
+
+    fun fromLogicJson(json: String): FlashLogicBean {
+        val gson = Gson()
+        return gson.fromJson(json, FlashLogicBean::class.java)
+    }
+
+    fun fromAdJson(json: String): FlashAdBean {
+        val gson = Gson()
+        return gson.fromJson(json, FlashAdBean::class.java)
+    }
+
+    fun getLogicJson(): FlashLogicBean {
+        val dataJson =
+            if (ooo_lj.isNullOrEmpty()) {
+                local_ad_logic
+            } else {
+                ooo_lj
+            }
+        return runCatching {
+            fromLogicJson(dataJson!!)
+        }.getOrNull() ?: fromLogicJson(local_ad_logic)
+    }
+
+    fun getAdJson(): FlashAdBean {
+        val dataJson =
+            if (ooo_ad.isNullOrEmpty()) {
+                local_ad_data
+            } else {
+                ooo_ad
+            }
+        return runCatching {
+            fromAdJson(dataJson!!)
+        }.getOrNull() ?: fromAdJson(local_ad_data)
+    }
+
+    fun blockAdBlacklist(): Boolean {
+        when (getLogicJson().pkk) {
+            "1" -> {
+                return blockData != "dairylea"
+            }
+
+            "2" -> {
+                return false
+            }
+
+            else -> {
+                return true
+            }
+        }
+    }
+    fun parseTwoNumbers(callback: (first: Int, second: Int) -> Unit) {
+        val default = 10
+        val num = getLogicJson().eed ?: ""
+        val parts = num.split("*")
+        val firstNumber = parts.getOrNull(0)?.toIntOrNull() ?: default
+        val secondNumber = parts.getOrNull(1)?.toIntOrNull() ?: default
+        callback(firstNumber, secondNumber)
+    }
+
+    fun log(msg: String) {
+        if (BuildConfig.DEBUG) {
+            Log.e("TAG", msg)
+        }
+    }
+    class NavigationViewOutlineProvider : ViewOutlineProvider() {
+        override fun getOutline(view: View?, outline: Outline?) {
+            val sView = view ?: return
+            val sOutline = outline ?: return
+            sOutline.setRoundRect(
+                0,
+                0,
+                sView.width,
+                sView.height,
+                8f
+            )
+        }
+    }
+    // 本地广告数据
+    const val local_ad_data = """
+{
+  "open":"ca-app-pub-3940256099942544/9257395921x",
+  "mnnt":"ca-app-pub-3940256099942544/2247696110x",
+  "rsnt":"ca-app-pub-3940256099942544/2247696110x",
+  "ctint":"ca-app-pub-3940256099942544/1033173712x",
+  "bcintserv":"ca-app-pub-3940256099942544/1033173712x",
+  "bcintres":"ca-app-pub-3940256099942544/1033173712x"
+}
+    """
+
+    //本地广告逻辑
+    const val local_ad_logic = """
+{
+    "dda":"",
+    "pkk": "1",
+    "eed": "10*10"
+}    """
 }

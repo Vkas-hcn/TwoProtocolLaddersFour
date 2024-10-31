@@ -1,58 +1,38 @@
 {
-  "code": 200,
-  "msg": "",
-  "data": {
-    "smart_list": [
-      {
-        "mode": "open",
-        "ip": "149.28.87.26",
-        "port": 1216,
-        "password": "H.U04mflG_e9XbzL",
-        "city": "Los Angeles",
-        "country_name": "United States"
-      },
-      {
-        "mode": "open",
-        "ip": "139.180.166.94",
-        "port": 1216,
-        "password": "H.U04mflG_e9XbzL",
-        "city": "Sydney",
-        "country_name": "Australia"
-      },
-      {
-        "mode": "open",
-        "ip": "155.138.147.26",
-        "port": 1216,
-        "password": "H.U04mflG_e9XbzL",
-        "city": "Toronto",
-        "country_name": "Canada"
-      }
-    ],
-    "server_list": [
-      {
-        "mode": "open",
-        "ip": "149.28.87.26",
-        "port": 1216,
-        "password": "H.U04mflG_e9XbzL",
-        "city": "Los Angeles",
-        "country_name": "United States"
-      },
-      {
-        "mode": "open",
-        "ip": "139.180.166.94",
-        "port": 1216,
-        "password": "H.U04mflG_e9XbzL",
-        "city": "Sydney",
-        "country_name": "Australia"
-      },
-      {
-        "mode": "open",
-        "ip": "155.138.147.26",
-        "port": 1216,
-        "password": "H.U04mflG_e9XbzL",
-        "city": "Toronto",
-        "country_name": "Canada"
-      }
-    ]
-  }
+  "orm": [
+    {
+      "paa": "ss",
+      "woo": "195.234.82.34",
+      "edw": 1216,
+      "sne": "H.U04mflG_e9XbzL",
+      "ceo": "Los Angeles",
+      "ttc": "United States"
+    }
+  ],
+  "rrl": [
+    {
+      "paa": "ss",
+      "woo": "149.28.87.26",
+      "edw": 1216,
+      "sne": "H.U04mflG_e9XbzL",
+      "ceo": "Los Angeles",
+      "ttc": "United States"
+    },
+    {
+      "paa": "ss",
+      "woo": "139.180.166.94",
+      "edw": 1216,
+      "sne": "H.U04mflG_e9XbzL",
+      "ceo": "Sydney",
+      "ttc": "Australia"
+    },
+    {
+      "paa": "ss",
+      "woo": "155.138.147.26",
+      "edw": 1216,
+      "sne": "H.U04mflG_e9XbzL",
+      "ceo": "Toronto",
+      "ttc": "Canada"
+    }
+  ]
 }

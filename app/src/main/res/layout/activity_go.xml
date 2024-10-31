@@ -5,6 +5,12 @@
 
     <data>
 
+        <import type="android.view.View" />
+
+        <variable
+            name="showLoad"
+            type="Boolean"
+            android:value="false" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -95,5 +101,34 @@
                 />
         </LinearLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ad_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
+            android:background="@drawable/bg_admob"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:id="@+id/img_oc_ad"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/admob_end" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ad_layout_admob"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/in_load"
+            layout="@layout/ad_load"
+            android:visibility="@{showLoad ? View.VISIBLE : View.GONE}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

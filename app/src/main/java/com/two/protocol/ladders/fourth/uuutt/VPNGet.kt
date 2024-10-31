@@ -23,19 +23,29 @@ object VPNGet {
         }
         return jsonString
     }
-    fun getAllData(): MutableList<VpnServerBean>? {
-        val allData = getJsonDataFromAsset(ZZZ.appContext, "servicesJson.json")
 
+    fun getAllData(): MutableList<VpnServerBean>? {
+        val allData = if (DataUser.ooo_tz.isNullOrBlank()) {
+            getJsonDataFromAsset(ZZZ.appContext, "servicesJson.json")
+        } else {
+            DataUser.ooo_tz
+        }
+        val vpnAllListBean = try {
+            Gson().fromJson(allData, VpnDataBean::class.java)
+        } catch (e: Exception) {
+            Gson().fromJson(
+                getJsonDataFromAsset(ZZZ.appContext, "servicesJson.json"), VpnDataBean::class.java
+            )
+        }
         return try {
-            val vpnAllListBean = Gson().fromJson(allData, VpnDataBean::class.java)
-            vpnAllListBean?.data?.let { data ->
-                if (data.server_list.isEmpty()) {
+            vpnAllListBean?.server_list?.let { data ->
+                if (data.isEmpty()) {
                     return null
                 }
                 getBestData()
                 val vpnBeatBean =
                     Gson().fromJson(DataUser.bestServiceKey, VpnServerBean::class.java)
-                val filteredServices = data.server_list.toMutableList()
+                val filteredServices = data.toMutableList()
                 filteredServices.add(0, vpnBeatBean)
                 return filteredServices
             } ?: run {
@@ -48,10 +58,14 @@ object VPNGet {
     }
 
     private fun getBestData() {
-        val allData = getJsonDataFromAsset(ZZZ.appContext, "servicesJson.json")
+        val allData = if (DataUser.ooo_tz.isNullOrBlank()) {
+            getJsonDataFromAsset(ZZZ.appContext, "servicesJson.json")
+        } else {
+            DataUser.ooo_tz
+        }
         val vpnAllListBean = Gson().fromJson(allData, VpnDataBean::class.java)
-        if (vpnAllListBean != null && vpnAllListBean.data != null && vpnAllListBean.data.smart_list.isNotEmpty()) {
-            val VpnDataBean: VpnServerBean = vpnAllListBean.data.smart_list.random()
+        if (vpnAllListBean != null && vpnAllListBean.smart_list.isNotEmpty()) {
+            val VpnDataBean: VpnServerBean = vpnAllListBean.smart_list.random()
             VpnDataBean.bestState = true
             VpnDataBean.country_name = "Smart"
             DataUser.bestServiceKey = Gson().toJson(VpnDataBean)
@@ -96,12 +110,14 @@ object VPNGet {
         alertDialog.show()
     }
 
-     fun switchingDialog(activity: ZZ,nextFun:()->Unit) {
+    fun switchingDialog(activity: ZZ, nextFun: () -> Unit) {
         val alertDialogBuilder = AlertDialog.Builder(activity)
             .setTitle("Tip")
-            .setMessage("Switching the connection mode will\n" +
-                    "disconnect the current connection\n" +
-                    "whether to continue\n")
+            .setMessage(
+                "Switching the connection mode will\n" +
+                        "disconnect the current connection\n" +
+                        "whether to continue\n"
+            )
             .setIcon(R.mipmap.ic_launcher)
             .setPositiveButton("OK") { dialog: DialogInterface?, which: Int ->
                 dialog?.dismiss()
@@ -119,6 +135,7 @@ object VPNGet {
         }
         alertDialog.show()
     }
+
     fun Context.shareText(text: String, subject: String = "") {
         val shareIntent = Intent().apply {
             action = Intent.ACTION_SEND
@@ -129,4 +146,7 @@ object VPNGet {
         startActivity(Intent.createChooser(shareIntent, "Share via"))
     }
 
+    fun isVPNConnected(): Boolean {
+        return ZZZ.saoState
+    }
 }

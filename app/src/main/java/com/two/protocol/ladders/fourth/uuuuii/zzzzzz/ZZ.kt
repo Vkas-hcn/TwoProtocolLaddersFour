@@ -1,5 +1,6 @@
 package com.two.protocol.ladders.fourth.uuuuii.zzzzzz
 
+import android.app.Activity
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -32,6 +33,7 @@ import com.google.gson.Gson
 import com.two.protocol.ladders.fourth.R
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ
 import com.two.protocol.ladders.fourth.databinding.ActivityMainBinding
+import com.two.protocol.ladders.fourth.ggggg.BaseAd
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.DataUser.getSaturnImage
 import com.two.protocol.ladders.fourth.uuutt.GlobalTimer
@@ -46,9 +48,12 @@ import de.blinkt.openvpn.api.IOpenVPNAPIService
 import de.blinkt.openvpn.api.IOpenVPNStatusCallback
 import de.blinkt.openvpn.core.ICSOpenVPNApplication
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeout
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import kotlin.system.exitProcess
@@ -56,12 +61,28 @@ import kotlin.system.exitProcess
 class ZZ : AppCompatActivity(),
     ShadowsocksConnection.Callback,
     OnPreferenceDataStoreChangeListener {
-    private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     private lateinit var requestPermissionForResultVPN: ActivityResultLauncher<Intent?>
     val connection = ShadowsocksConnection(true)
     var mService: IOpenVPNAPIService? = null
     private var stopConnect = false
+    private var showConnectJob: Job? = null
+    private var showHomeJob: Job? = null
 
+
+    val listPage =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                showHomeAd()
+            }
+        }
+
+    val endPage =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                showHomeAd()
+            }
+        }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -69,6 +90,7 @@ class ZZ : AppCompatActivity(),
         intVpn()
         activeFun()
         backFun()
+        showHomeAd()
         NetOnInfo.showDueDialog(this)
     }
 
@@ -104,9 +126,7 @@ class ZZ : AppCompatActivity(),
         binding.linNav.setOnClickListener {
 
         }
-//        binding.viewGuideLottie.setOnClickListener {
-//
-//        }
+
         binding.tvPrivacyPolicy.setOnClickListener {
             startActivity(
                 Intent(
@@ -122,7 +142,8 @@ class ZZ : AppCompatActivity(),
         }
         binding.linList.setOnClickListener {
             limitClickActions {
-                startActivity(Intent(this@ZZ, LL::class.java))
+                BaseAd.getBackListInstance().advertisementLoadingFlash(this)
+                listPage.launch(Intent(this, LL::class.java))
             }
         }
         binding.mainMenu.setOnClickListener {
@@ -136,9 +157,7 @@ class ZZ : AppCompatActivity(),
         binding.imgConnect.setOnClickListener {
             activeTONextVpn()
         }
-//        binding.laGuide.setOnClickListener {
-//            activeTONextVpn()
-//        }
+
         binding.tvAuto.setOnClickListener {
             limitClickActions {
                 if (DataUser.protocolValueKey != "1" && ZZZ.saoState) {
@@ -179,11 +198,6 @@ class ZZ : AppCompatActivity(),
 
     private fun backFun() {
         onBackPressedDispatcher.addCallback(this) {
-//            if (binding?.viewGuideLottie?.isVisible == true) {
-//                stopConnect = true
-//                activeGuide(false)
-//                return@addCallback
-//            }
             if (isConnecting()) {
                 Toast.makeText(this@ZZ, "Connecting... Please wait", Toast.LENGTH_SHORT)
                     .show()
@@ -195,11 +209,11 @@ class ZZ : AppCompatActivity(),
                 return@addCallback
             }
             finish()
-            exitProcess(0)
         }
     }
 
     private fun isConnecting(): Boolean {
+        Log.e("TAG", "isConnecting:- ${ZZZ.saoClick}----${ZZZ.nowVpnUI}")
         return ZZZ.saoClick == 0 && ZZZ.nowVpnUI == 1
     }
 
@@ -213,7 +227,6 @@ class ZZ : AppCompatActivity(),
     }
 
     private fun activeTONextVpn() {
-        activeGuide(false)
         if (VPNGet.isNetworkConnected(this)) {
             return
         }
@@ -242,7 +255,6 @@ class ZZ : AppCompatActivity(),
         if (ZZZ.nowVpnUI == 1) {
             return
         }
-        activeGuide(false)
         setTypeService(1)
         ZZZ.saoClick = if (ZZZ.saoState) {
             2
@@ -263,13 +275,17 @@ class ZZ : AppCompatActivity(),
             if (!ZZZ.saoState) {
                 connectHowVpn()
             } else {
-                disConnectHowVpn()
+                showConnectAd(false) {
+                    disConnectHowVpn()
+                }
             }
         }
     }
 
     private fun connectHowVpn() {
         if (DataUser.protocolValueKey != "3") {
+            val connectNowVpn = Gson().fromJson(DataUser.nowServiceKey, VpnServerBean::class.java)
+            DataUser.connectIp = connectNowVpn.ip
             Core.startService()
         } else {
             openVTool()
@@ -285,7 +301,6 @@ class ZZ : AppCompatActivity(),
         lifecycleScope.launch(Dispatchers.IO) {
             NetOnInfo.getIPInfo()
         }
-        activeGuide(true)
         binding.showProtocol = (DataUser.protocolValueKey ?: "1").toInt()
         binding.dlHome.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         GlobalTimer.onTimeUpdate = { formattedTime ->
@@ -296,10 +311,8 @@ class ZZ : AppCompatActivity(),
     override fun stateChanged(state: BaseService.State, profileName: String?, msg: String?) {
         Log.e("TAG", "ss-stateChanged: ${state.name}")
         if (state.name == "Connected") {
-            connectEndPage()
             ZZZ.saoState = true
-            setTypeService(2)
-            showVpnSpeed()
+            connectSuccessFun()
         }
         if (state.name == "Stopped") {
             disConnectEndPage()
@@ -312,7 +325,6 @@ class ZZ : AppCompatActivity(),
         val state = BaseService.State.values()[service.state]
         Log.e("TAG", "ss-初始化: ${state.name}")
         if (state.name == "Connected") {
-            activeGuide(false)
             ZZZ.saoState = true
             setTypeService(2)
         }
@@ -328,11 +340,8 @@ class ZZ : AppCompatActivity(),
             lifecycleScope.launch(Dispatchers.Main) {
                 when (state) {
                     "CONNECTED" -> {
-                        activeGuide(false)
-                        connectEndPage()
                         ZZZ.saoState = true
-                        setTypeService(2)
-                        showVpnSpeed()
+                        connectSuccessFun()
                     }
 
                     "CONNECTING" -> {
@@ -448,7 +457,6 @@ class ZZ : AppCompatActivity(),
     }
 
     private fun setSkServerData(profile: Profile, bestData: VpnServerBean): Profile {
-        Log.e("TAG", "Vpn Service information:-ss =${Gson().toJson(bestData)}")
         DataUser.nowServiceKey = Gson().toJson(bestData)
         profile.name = bestData.country_name + "-" + bestData.city
         profile.host = bestData.ip
@@ -500,28 +508,15 @@ class ZZ : AppCompatActivity(),
         }
     }
 
-    private fun activeGuide(cloneState: Boolean) {
-//        Log.e(
-//            "TAG",
-//            "activeGuide: $cloneState==${DataUser.isCloneGuideKey}==${!ZZZ.saoState}",
-//        )
-//        if ((cloneState && DataUser.isCloneGuideKey == "1") && !ZZZ.saoState) {
-//            binding.laGuide.isVisible = true
-//            binding.viewGuideLottie.isVisible = true
-//        } else {
-//            binding.laGuide.isVisible = false
-//            binding.viewGuideLottie.isVisible = false
-//            DataUser.isCloneGuideKey = ""
-//        }
-    }
 
     private fun openVTool() {
         lifecycleScope.launch(Dispatchers.IO) {
             runCatching {
                 val vpnNowBean =
                     Gson().fromJson(DataUser.nowServiceKey, VpnServerBean::class.java)
+                DataUser.connectIp = vpnNowBean.ip
                 Log.e("TAG", "Vpn Service information-open: =${Gson().toJson(vpnNowBean)}")
-                val conf = this@ZZ.assets.open("fast_190.ovpn")
+                val conf = this@ZZ.assets.open("fast_ippooltest.ovpn")
                 val br = BufferedReader(InputStreamReader(conf))
                 val config = StringBuilder()
                 var line: String?
@@ -559,15 +554,15 @@ class ZZ : AppCompatActivity(),
         }
     }
 
-    fun connectEndPage() {
+    private fun connectEndPage() {
         if (isConnecting()) {
-            startActivity(Intent(this@ZZ, EE::class.java))
+            endPage.launch(Intent(this, EE::class.java))
         }
     }
 
     fun disConnectEndPage() {
         if (isDisConnecting()) {
-            startActivity(Intent(this@ZZ, EE::class.java))
+            endPage.launch(Intent(this, EE::class.java))
         }
     }
 
@@ -582,6 +577,108 @@ class ZZ : AppCompatActivity(),
                     binding.tvSpeedUp.text = "0 bit/s"
                 }
                 delay(500)
+            }
+        }
+    }
+
+    fun connectSuccessFun() {
+        if (isConnecting()) {
+            BaseAd.getEndInstance().advertisementLoadingFlash(this)
+            BaseAd.getBackEndInstance().advertisementLoadingFlash(this)
+            BaseAd.getHomeInstance().advertisementLoadingFlash(this)
+            showConnectAd(true) {
+                connectEndPage()
+                setTypeService(2)
+                showVpnSpeed()
+            }
+        } else {
+            connectEndPage()
+            setTypeService(2)
+            showVpnSpeed()
+        }
+    }
+
+    private fun showConnectAd(isConnect: Boolean, nextFun: () -> Unit) {
+        var eed = 0
+        DataUser.parseTwoNumbers { first, second ->
+            // 使用 first 和 second
+            eed = if (isConnect) {
+                first
+            } else {
+                second
+            }
+        }
+        showConnectJob = lifecycleScope.launch() {
+            val baseAd = BaseAd.getConnectInstance()
+            val adConnectData = baseAd.appAdDataFlash
+            if (baseAd.canShowAd(this@ZZ, baseAd) == 0) {
+                nextFun()
+                return@launch
+            }
+            if (adConnectData == null) {
+                baseAd.advertisementLoadingFlash(this@ZZ)
+            }
+            try {
+                withTimeout(eed * 1000L) {
+                    while (isActive) {
+                        if (baseAd.canShowAd(this@ZZ, baseAd) == 2) {
+                            baseAd.playIntAdvertisementFlash(
+                                this@ZZ,
+                                baseAd,
+                                closeWindowFun = {
+                                    showConnectJob?.cancel()
+                                    showConnectJob = null
+                                    nextFun()
+                                    if (isConnect) {
+                                        baseAd.advertisementLoadingFlash(this@ZZ)
+                                    }
+                                })
+                            showConnectJob?.cancel()
+                            showConnectJob = null
+                            break
+                        }
+                        delay(500)
+                    }
+                }
+            } catch (e: TimeoutCancellationException) {
+                showConnectJob?.cancel()
+                showConnectJob = null
+                nextFun()
+            }
+        }
+    }
+
+    private fun showHomeAd() {
+        Log.e("TAG", "showHomeAd: ", )
+        showHomeJob?.cancel()
+        showHomeJob = null
+        val baseAd = BaseAd.getHomeInstance()
+        if (DataUser.blockAdBlacklist()) {
+            binding.adLayout.isVisible = false
+            return
+        }
+        if (!VPNGet.isVPNConnected()) {
+            binding.adLayoutAdmob.isVisible = false
+            binding.imgOcAd.isVisible = true
+            return
+        }
+        binding.adLayout.isVisible = true
+        binding.imgOcAd.isVisible = true
+        baseAd.advertisementLoadingFlash(this)
+        if (baseAd.canShowAd(this@ZZ, baseAd) == 0) {
+            showHomeJob?.cancel()
+            showHomeJob = null
+            return
+        }
+        showHomeJob = lifecycleScope.launch {
+            while (isActive) {
+                delay(500L)
+                if (baseAd.canShowAd(this@ZZ, baseAd) == 2) {
+                    baseAd.playNativeAdvertisementFlash(this@ZZ,baseAd)
+                    showHomeJob?.cancel()
+                    showHomeJob = null
+                    break
+                }
             }
         }
     }

@@ -4,7 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
 
+        <variable
+            name="showLoad"
+            type="Boolean"
+            android:value="false" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -43,5 +48,9 @@
             android:layout_marginHorizontal="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        <include
+            android:id="@+id/in_load"
+            layout="@layout/ad_load"
+            android:visibility="@{showLoad ? View.VISIBLE : View.GONE}" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

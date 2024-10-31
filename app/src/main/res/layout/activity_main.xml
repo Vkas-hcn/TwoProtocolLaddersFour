@@ -11,6 +11,11 @@
             name="showProtocol"
             type="Integer"
             android:value="1" />
+
+        <variable
+            name="showLoad"
+            type="Boolean"
+            android:value="false" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -287,26 +292,37 @@
                 app:lottie_fileName="anniu.json"
                 app:lottie_loop="true" />
 
-<!--            <View-->
-<!--                android:id="@+id/view_guide_lottie"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:background="#8C252525"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="parent" />-->
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ad_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:background="@drawable/bg_admob"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent">
 
-<!--            <com.airbnb.lottie.LottieAnimationView-->
-<!--                android:id="@+id/la_guide"-->
-<!--                android:layout_width="175dp"-->
-<!--                android:layout_height="230dp"-->
-<!--                android:layout_marginBottom="7dp"-->
-<!--                app:layout_constraintBottom_toBottomOf="@+id/imageView3"-->
-<!--                app:layout_constraintEnd_toEndOf="@+id/imageView3"-->
-<!--                app:layout_constraintStart_toStartOf="@+id/imageView3"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/imageView3"-->
-<!--                app:lottie_autoPlay="true"-->
-<!--                app:lottie_fileName="guide.json"-->
-<!--                app:lottie_loop="true" />-->
+                <ImageView
+                    android:id="@+id/img_oc_ad"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:scaleType="fitXY"
+                    android:visibility="gone"
+                    android:src="@drawable/admob_native" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/ad_layout_admob"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <include
+                android:id="@+id/in_load"
+                layout="@layout/ad_load"
+                android:visibility="@{showLoad ? View.VISIBLE : View.GONE}" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <LinearLayout
