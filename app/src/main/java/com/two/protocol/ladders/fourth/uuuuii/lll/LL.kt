@@ -90,6 +90,9 @@ class LL : AppCompatActivity() {
                         break
                     }
                     if (elapsedTime >= 1000L && baseAd.canShowAd(this@LL, baseAd) == 2) {
+                        backJob?.cancel()
+                        backJob = null
+                        binding.showLoad = false
                         baseAd.playIntAdvertisementFlash(
                             this@LL,
                             baseAd,
