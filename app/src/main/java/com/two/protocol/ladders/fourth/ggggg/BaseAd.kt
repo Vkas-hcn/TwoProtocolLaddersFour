@@ -26,11 +26,14 @@ import com.google.android.gms.ads.nativead.NativeAdView
 import com.two.protocol.ladders.fourth.R
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.DataUser.TAG
+import com.two.protocol.ladders.fourth.uuutt.DataUser.endTypeIp
+import com.two.protocol.ladders.fourth.uuutt.DataUser.homeTypeIp
 import com.two.protocol.ladders.fourth.uuutt.VPNGet
 import com.two.protocol.ladders.fourth.uuuuii.eeedd.EE
 import com.two.protocol.ladders.fourth.uuuuii.zzzzzz.ZZ
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.util.Date
 
 
@@ -119,22 +122,18 @@ class BaseAd private constructor() {
             Log.e(TAG, "黑名单屏蔽：${instanceName}广告，不加载")
             return
         }
+
+        if (appAdDataFlash == null) {
+            isLoadingFlash = true
+            loadStartupPageAdvertisementFlash(context, DataUser.getAdJson())
+        }
         if ((getLoadIp().isNotEmpty()) && getLoadIp() != DataUser.connectIp) {
-            Log.e(
-                "TAG",
-                "${getInstanceName()}-ip不一致-重新加载-load_ip=" + getLoadIp() + "-now-ip=" + DataUser.connectIp
-            )
+            Timber.e(getInstanceName() + "-ip不一致-重新加载-load_ip=" + getLoadIp() + "-now-ip=" + DataUser.connectIp)
             whetherToShowFlash = false
             appAdDataFlash = null
             clearLoadIp()
             advertisementLoadingFlash(context)
             return
-        }
-        when (appAdDataFlash) {
-            null -> {
-                isLoadingFlash = true
-                loadStartupPageAdvertisementFlash(context, DataUser.getAdJson())
-            }
         }
         if (appAdDataFlash != null && !whetherAdExceedsOneHour(loadTimeFlash)) {
             isLoadingFlash = true
@@ -199,7 +198,6 @@ class BaseAd private constructor() {
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-
                     getOpenInstance().isLoadingFlash = false
                     getOpenInstance().appAdDataFlash = null
                     if (!isFirstLoad) {
@@ -269,6 +267,7 @@ class BaseAd private constructor() {
         )
         advertisingOpenCallbackFlash(fullScreenFun)
         (getOpenInstance().appAdDataFlash as AppOpenAd).show(activity)
+        clearLoadIp()
         return true
     }
 
@@ -356,7 +355,7 @@ class BaseAd private constructor() {
             return 0
         }
         val blacklistState = DataUser.blockAdBlacklist()
-        if (blacklistState && (adBase != getOpenInstance() || adBase != getEndInstance())) {
+        if (blacklistState && (adBase == getConnectInstance() || adBase == getBackEndInstance() || adBase == getBackListInstance() || adBase == getHomeInstance())) {
             Log.e(TAG, "黑名单屏蔽：${adBase.getInstanceName()}广告，不显示")
             return 0
         }
@@ -372,7 +371,7 @@ class BaseAd private constructor() {
         if ((getLoadIp().isNotEmpty()) && getLoadIp() != vpnIp) {
             Log.e(
                 TAG,
-                "${adBase.getInstanceName()}-ip不一致-不能展示-load_ip=" + getLoadIp()  + "-now-ip=" + vpnIp
+                "${adBase.getInstanceName()}-ip不一致-不能展示-load_ip=" + getLoadIp() + "-now-ip=" + vpnIp
             )
             return 0
         }
@@ -384,11 +383,15 @@ class BaseAd private constructor() {
         adBase: BaseAd,
         closeWindowFun: () -> Unit
     ) {
-        Log.e(TAG, "${adBase.getInstanceName()}-ip一致-展示-")
+        Log.e(
+            TAG,
+            "${adBase.getInstanceName()}-ip一致-展示-load_ip=" + getLoadIp() + "-now-ip=" + DataUser.connectIp
+        )
         intScreenAdCallback(adBase, closeWindowFun)
         activity.lifecycleScope.launch(Dispatchers.Main) {
             if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 (adBase.appAdDataFlash as InterstitialAd).show(activity)
+                clearLoadIp()
             }
         }
     }
@@ -397,7 +400,10 @@ class BaseAd private constructor() {
         activity: AppCompatActivity,
         adBase: BaseAd,
     ) {
-        Log.e(TAG, "${adBase.getInstanceName()}-ip一致-展示-")
+        Log.e(
+            TAG,
+            "${adBase.getInstanceName()}-ip一致-展示-load_ip=" + getLoadIp() + "-now-ip=" + DataUser.connectIp
+        )
         if (adBase == getHomeInstance()) {
             setDisplayHomeNativeAdFlash(activity as ZZ, adBase)
         } else {
@@ -418,7 +424,7 @@ class BaseAd private constructor() {
                 loadId = adData.rsnt
             }
         }
-        Log.e(TAG, "loadNativeAdvertisement: $loadId", )
+        Log.e(TAG, "loadNativeAdvertisement: $loadId")
         val vpnNativeAds = AdLoader.Builder(
             context.applicationContext,
             loadId
@@ -496,6 +502,7 @@ class BaseAd private constructor() {
                     activity.binding.adLayoutAdmob.isVisible = true
                     adBase.appAdDataFlash = null
                     adBase.isLoadingFlash = false
+                    homeTypeIp = ""
                 }
             }
         }
@@ -524,6 +531,7 @@ class BaseAd private constructor() {
                     activity.binding.adLayoutAdmob.isVisible = true
                     adBase.appAdDataFlash = null
                     adBase.isLoadingFlash = false
+                    endTypeIp = ""
                 }
             }
         }

@@ -6,6 +6,7 @@ import android.animation.ValueAnimator
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.LinearInterpolator
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -109,6 +110,9 @@ class EE : AppCompatActivity() {
                         break
                     }
                     if (elapsedTime >= 1000L && baseAd.canShowAd(this@EE, baseAd) == 2) {
+                        backJob?.cancel()
+                        backJob = null
+                        binding.showLoad = false
                         baseAd.playIntAdvertisementFlash(
                             this@EE,
                             baseAd,
@@ -128,10 +132,6 @@ class EE : AppCompatActivity() {
         endJob?.cancel()
         endJob = null
         val baseAd = BaseAd.getEndInstance()
-        if (DataUser.blockAdBlacklist()) {
-            binding.adLayout.isVisible = false
-            return
-        }
         if (!VPNGet.isVPNConnected()) {
             binding.adLayoutAdmob.isVisible = false
             binding.imgOcAd.isVisible = true

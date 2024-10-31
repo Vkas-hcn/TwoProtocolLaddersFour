@@ -159,7 +159,7 @@ class GG : AppCompatActivity() {
         jobOpenAdsFlash = lifecycleScope.launch {
             delay(1000L)
             try {
-                withTimeout(10000L) {
+                withTimeout(6000L) {
                     var keepLooping = true
                     while (keepLooping && isActive) {
                         val adData = DataUser.ooo_ad
