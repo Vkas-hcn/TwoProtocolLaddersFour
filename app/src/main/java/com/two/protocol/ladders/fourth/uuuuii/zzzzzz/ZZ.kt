@@ -144,7 +144,7 @@ class ZZ : AppCompatActivity(),
         }
         binding.linList.setOnClickListener {
             limitClickActions {
-                BaseAd.getBackListInstance().advertisementLoadingFlash(this)
+                BaseAd.getBackListInstance().advertisementLoadingForest(this)
                 listPage.launch(Intent(this, LL::class.java))
             }
         }
@@ -589,9 +589,9 @@ class ZZ : AppCompatActivity(),
 
     fun connectSuccessFun() {
         if (isConnecting()) {
-            BaseAd.getEndInstance().advertisementLoadingFlash(this)
-            BaseAd.getBackEndInstance().advertisementLoadingFlash(this)
-            BaseAd.getHomeInstance().advertisementLoadingFlash(this)
+            BaseAd.getEndInstance().advertisementLoadingForest(this)
+            BaseAd.getBackEndInstance().advertisementLoadingForest(this)
+            BaseAd.getHomeInstance().advertisementLoadingForest(this)
             showConnectAd(true) {
                 connectEndPage()
                 setTypeService(2)
@@ -616,19 +616,19 @@ class ZZ : AppCompatActivity(),
         }
         showConnectJob = lifecycleScope.launch() {
             val baseAd = BaseAd.getConnectInstance()
-            val adConnectData = baseAd.appAdDataFlash
+            val adConnectData = baseAd.appAdDataForest
             if (baseAd.canShowAd(this@ZZ, baseAd) == 0) {
                 nextFun()
                 return@launch
             }
             if (adConnectData == null) {
-                baseAd.advertisementLoadingFlash(this@ZZ)
+                baseAd.advertisementLoadingForest(this@ZZ)
             }
             try {
                 withTimeout(eed * 1000L) {
                     while (isActive) {
                         if (baseAd.canShowAd(this@ZZ, baseAd) == 2) {
-                            baseAd.playIntAdvertisementFlash(
+                            baseAd.playIntAdvertisementForest(
                                 this@ZZ,
                                 baseAd,
                                 closeWindowFun = {
@@ -636,7 +636,7 @@ class ZZ : AppCompatActivity(),
                                     showConnectJob = null
                                     nextFun()
                                     if (isConnect) {
-                                        baseAd.advertisementLoadingFlash(this@ZZ)
+                                        baseAd.advertisementLoadingForest(this@ZZ)
                                     }
                                 })
                             showConnectJob?.cancel()
@@ -669,7 +669,7 @@ class ZZ : AppCompatActivity(),
         }
         binding.adLayout.isVisible = true
         binding.imgOcAd.isVisible = true
-        baseAd.advertisementLoadingFlash(this)
+        baseAd.advertisementLoadingForest(this)
         if (baseAd.canShowAd(this@ZZ, baseAd) == 0) {
             showHomeJob?.cancel()
             showHomeJob = null
@@ -679,7 +679,7 @@ class ZZ : AppCompatActivity(),
             while (isActive) {
                 delay(500L)
                 if (baseAd.canShowAd(this@ZZ, baseAd) == 2) {
-                    baseAd.playNativeAdvertisementFlash(this@ZZ, baseAd)
+                    baseAd.playNativeAdvertisementForest(this@ZZ, baseAd)
                     showHomeJob?.cancel()
                     showHomeJob = null
                     break

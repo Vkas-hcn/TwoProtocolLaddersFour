@@ -10,8 +10,8 @@ import com.google.gson.Gson
 import com.two.protocol.ladders.fourth.BuildConfig
 import com.two.protocol.ladders.fourth.R
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ
-import com.two.protocol.ladders.fourth.ggggg.FlashAdBean
-import com.two.protocol.ladders.fourth.ggggg.FlashLogicBean
+import com.two.protocol.ladders.fourth.ggggg.ForestAdBean
+import com.two.protocol.ladders.fourth.ggggg.ForestLogicBean
 
 object DataUser {
     const val TAG = "TWO"
@@ -204,17 +204,17 @@ object DataUser {
         }
     }
 
-    fun fromLogicJson(json: String): FlashLogicBean {
+    fun fromLogicJson(json: String): ForestLogicBean {
         val gson = Gson()
-        return gson.fromJson(json, FlashLogicBean::class.java)
+        return gson.fromJson(json, ForestLogicBean::class.java)
     }
 
-    fun fromAdJson(json: String): FlashAdBean {
+    fun fromAdJson(json: String): ForestAdBean {
         val gson = Gson()
-        return gson.fromJson(json, FlashAdBean::class.java)
+        return gson.fromJson(json, ForestAdBean::class.java)
     }
 
-    fun getLogicJson(): FlashLogicBean {
+    fun getLogicJson(): ForestLogicBean {
         val dataJson =
             if (ooo_lj.isNullOrEmpty()) {
                 local_ad_logic
@@ -226,7 +226,7 @@ object DataUser {
         }.getOrNull() ?: fromLogicJson(local_ad_logic)
     }
 
-    fun getAdJson(): FlashAdBean {
+    fun getAdJson(): ForestAdBean {
         val dataJson =
             if (ooo_ad.isNullOrEmpty()) {
                 getIsRelease()
@@ -249,7 +249,7 @@ object DataUser {
     fun blockAdBlacklist(): Boolean {
         when (getLogicJson().pkk) {
             "1" -> {
-                return blockData != "dairylea"
+                return blockData != "booty"
             }
 
             "2" -> {

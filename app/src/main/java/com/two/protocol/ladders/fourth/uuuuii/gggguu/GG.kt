@@ -43,8 +43,8 @@ import kotlin.system.exitProcess
 
 class GG : AppCompatActivity() {
     private val binding by lazy { ActivityFirstBinding.inflate(layoutInflater) }
-    private var jobOpenAdsFlash: Job? = null
-    private var startCateFlash: Job? = null
+    private var jobOpenAdsForest: Job? = null
+    private var startCateForest: Job? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -76,7 +76,7 @@ class GG : AppCompatActivity() {
 
     private fun getFileBaseData() {
         initFaceBook()
-        startCateFlash = lifecycleScope.launch {
+        startCateForest = lifecycleScope.launch {
             var isCa = false
             val auth = Firebase.remoteConfig
             auth.fetchAndActivate().addOnSuccessListener {
@@ -100,14 +100,14 @@ class GG : AppCompatActivity() {
                         if (isCa) {
                             loadAdFun()
                             cancel()
-                            startCateFlash = null
+                            startCateForest = null
                         }
                         delay(500)
                     }
                 }
             } catch (e: TimeoutCancellationException) {
                 cancel()
-                startCateFlash = null
+                startCateForest = null
                 loadAdFun()
             }
         }
@@ -125,10 +125,10 @@ class GG : AppCompatActivity() {
     }
 
     private fun loadAdFun() {
-        BaseAd.getOpenInstance().advertisementLoadingFlash(this)
+        BaseAd.getOpenInstance().advertisementLoadingForest(this)
         connectToVPNFun()
-        BaseAd.getHomeInstance().advertisementLoadingFlash(this)
-        BaseAd.getConnectInstance().advertisementLoadingFlash(this)
+        BaseAd.getHomeInstance().advertisementLoadingForest(this)
+        BaseAd.getConnectInstance().advertisementLoadingForest(this)
     }
 
     private fun ccc(){
@@ -155,8 +155,8 @@ class GG : AppCompatActivity() {
     }
 
     private fun checkData() {
-        jobOpenAdsFlash?.cancel()
-        jobOpenAdsFlash = lifecycleScope.launch {
+        jobOpenAdsForest?.cancel()
+        jobOpenAdsForest = lifecycleScope.launch {
             delay(1000L)
             try {
                 withTimeout(6000L) {
@@ -176,15 +176,15 @@ class GG : AppCompatActivity() {
                 finishOpenAd()
             }
         }
-        jobOpenAdsFlash?.invokeOnCompletion {
-            jobOpenAdsFlash = null
+        jobOpenAdsForest?.invokeOnCompletion {
+            jobOpenAdsForest = null
         }
     }
 
     private fun loadOpenAd() {
-        jobOpenAdsFlash?.cancel()
-        jobOpenAdsFlash = null
-        jobOpenAdsFlash = lifecycleScope.launch {
+        jobOpenAdsForest?.cancel()
+        jobOpenAdsForest = null
+        jobOpenAdsForest = lifecycleScope.launch {
             if (!VPNGet.isVPNConnected()) {
                 finishOpenAd()
                 return@launch
@@ -193,12 +193,12 @@ class GG : AppCompatActivity() {
                 withTimeout(10000L) {
                     while (isActive) {
                         val showState = BaseAd.getOpenInstance()
-                            .displayOpenAdvertisementFlash(this@GG, fullScreenFun = {
+                            .displayOpenAdvertisementForest(this@GG, fullScreenFun = {
                                 startToMain()
                             })
                         if (showState) {
                             cancel()
-                            jobOpenAdsFlash = null
+                            jobOpenAdsForest = null
                             binding.progressBarFirst.progress = 100
                         }
                         delay(500L)
@@ -211,8 +211,8 @@ class GG : AppCompatActivity() {
     }
 
     private fun finishOpenAd() {
-        jobOpenAdsFlash?.cancel()
-        jobOpenAdsFlash = null
+        jobOpenAdsForest?.cancel()
+        jobOpenAdsForest = null
         binding.progressBarFirst.progress = 100
         startToMain()
     }

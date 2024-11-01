@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import com.two.protocol.ladders.fourth.BuildConfig
+import com.two.protocol.ladders.fourth.aaaaa.ZZZ
 import com.two.protocol.ladders.fourth.uuutt.DataUser.log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -13,6 +14,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
@@ -143,53 +145,63 @@ object NetOnInfo {
         }
         return false
     }
-    private fun getAppVersion(context: Context): String? {
+
+    private fun getAppVersion(): String? {
         return try {
-            val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            val packageInfo =
+                ZZZ.appContext.packageManager.getPackageInfo(ZZZ.appContext.packageName, 0)
             packageInfo.versionName
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
             null
         }
     }
-    fun blackData(context: Context): Map<String, Any> {
+
+    private fun blackData(): Map<String, Any> {
         return mapOf(
-            "erudite" to "com.foxmod.connectionlink",
-            "dustbin" to "breton",
-            "brought" to getAppVersion(context).orEmpty(),
-            "teen" to DataUser.postUUID,
-            "cloy" to System.currentTimeMillis()
+            "frazzle" to "com.forest.stable.game.video.fast.easy",
+            "schism" to "shoshone",
+            "brandt" to getAppVersion().orEmpty(),
+            "dedicate" to DataUser.postUUID,
+            "commerce" to System.currentTimeMillis()
         )
     }
+
     fun getBlackList(context: Context) {
         if (!DataUser.blockData.isNullOrBlank()) {
             return
         }
-        getMapData(
-            "https://wag.connectionlink.link/togging/morrill",
-            blackData(context),
-            onNext = {
-                log( "The blacklist request is successful：$it")
-                DataUser.blockData = it
-            },
-            onError = {
-                GlobalScope.launch(Dispatchers.IO) {
-                    delay(10000)
-                    log( "The blacklist request failed：$it")
-                    getBlackList(context)
+        postMapData(
+            "https://font.foreststable.com/traffic/gunflint",
+            blackData(),
+            object : ResponseCallback {
+                override fun onSuccess(response: String) {
+                    log("The blacklist request is successful：$response")
+                    DataUser.blockData = response
+                }
+
+                override fun onFailure(error: String) {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        delay(10000)
+                        log("The blacklist request failed：$error")
+                        getBlackList(context)
+                    }
                 }
             })
     }
-    fun getMapData(
+
+    interface ResponseCallback {
+        fun onSuccess(response: String)
+        fun onFailure(error: String)
+    }
+
+    private fun getMapData(
         url: String,
         map: Map<String, Any>,
-        onNext: (response: String) -> Unit,
-        onError: (error: String) -> Unit
+        callback: ResponseCallback
     ) {
-
         val queryParameters = StringBuilder()
         for ((key, value) in map) {
-
             queryParameters.append("&")
             queryParameters.append(URLEncoder.encode(key, "UTF-8"))
             queryParameters.append("=")
@@ -201,12 +213,56 @@ object NetOnInfo {
         } else {
             "$url?$queryParameters"
         }
-        val url = URL(urlString)
-        val connection = url.openConnection() as HttpURLConnection
+        val urlObj = URL(urlString)
+        val connection = urlObj.openConnection() as HttpURLConnection
         connection.requestMethod = "GET"
-        connection.connectTimeout = 15000
+        connection.connectTimeout = 12000
 
         try {
+            val responseCode = connection.responseCode
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                val inputStream = connection.inputStream
+                val reader = BufferedReader(InputStreamReader(inputStream))
+                val response = StringBuilder()
+                var line: String?
+                while (reader.readLine().also { line = it } != null) {
+                    response.append(line)
+                }
+                reader.close()
+                inputStream.close()
+                callback.onSuccess(response.toString())
+            } else {
+                callback.onFailure("HTTP error: $responseCode")
+            }
+        } catch (e: Exception) {
+            callback.onFailure("Network error: ${e.message}")
+        } finally {
+            connection.disconnect()
+        }
+    }
+
+
+
+    private fun postMapData(
+        url: String,
+        map: Map<String, Any>,
+        callback: ResponseCallback
+    ) {
+        val jsonBody = JSONObject(map).toString()  // Convert map to JSON string
+
+        val urlObj = URL(url)
+        val connection = urlObj.openConnection() as HttpURLConnection
+        connection.requestMethod = "POST"
+        connection.connectTimeout = 12000
+        connection.doOutput = true
+        connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+
+        try {
+            // Write JSON to the request body
+            val outputStream = OutputStreamWriter(connection.outputStream, "UTF-8")
+            outputStream.write(jsonBody)
+            outputStream.flush()
+            outputStream.close()
 
             val responseCode = connection.responseCode
             if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -219,14 +275,15 @@ object NetOnInfo {
                 }
                 reader.close()
                 inputStream.close()
-                onNext(response.toString())
+                callback.onSuccess(response.toString())
             } else {
-                onError("HTTP error: $responseCode")
+                callback.onFailure("HTTP error: $responseCode")
             }
         } catch (e: Exception) {
-            onError("Network error: ${e.message}")
+            callback.onFailure("Network error: ${e.message}")
         } finally {
             connection.disconnect()
         }
     }
+
 }

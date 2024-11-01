@@ -76,8 +76,8 @@ class LL : AppCompatActivity() {
                 nextFun()
                 return@launch
             }
-            if (baseAd.appAdDataFlash == null) {
-                baseAd.advertisementLoadingFlash(this@LL)
+            if (baseAd.appAdDataForest == null) {
+                baseAd.advertisementLoadingForest(this@LL)
             }
             val startTime = System.currentTimeMillis()
             var elapsedTime: Long
@@ -93,7 +93,7 @@ class LL : AppCompatActivity() {
                         backJob?.cancel()
                         backJob = null
                         binding.showLoad = false
-                        baseAd.playIntAdvertisementFlash(
+                        baseAd.playIntAdvertisementForest(
                             this@LL,
                             baseAd,
                             closeWindowFun = {

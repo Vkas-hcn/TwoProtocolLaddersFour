@@ -26,8 +26,6 @@ import com.google.android.gms.ads.nativead.NativeAdView
 import com.two.protocol.ladders.fourth.R
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.DataUser.TAG
-import com.two.protocol.ladders.fourth.uuutt.DataUser.endTypeIp
-import com.two.protocol.ladders.fourth.uuutt.DataUser.homeTypeIp
 import com.two.protocol.ladders.fourth.uuutt.VPNGet
 import com.two.protocol.ladders.fourth.uuuuii.eeedd.EE
 import com.two.protocol.ladders.fourth.uuuuii.zzzzzz.ZZ
@@ -39,77 +37,50 @@ import java.util.Date
 
 class BaseAd private constructor() {
     companion object {
-        private val instanceHelper = InstanceHelper
-
-        fun getOpenInstance() = InstanceHelper.openLoadFlash
-        fun getHomeInstance() = InstanceHelper.homeLoadFlash
-        fun getEndInstance() = InstanceHelper.resultLoadFlash
-        fun getConnectInstance() = InstanceHelper.connectLoadFlash
-        fun getBackEndInstance() = InstanceHelper.backEndLoadFlash
-        fun getBackListInstance() = InstanceHelper.backListLoadFlash
+        fun getOpenInstance() = BaseAdInstall.openLoadForest
+        fun getHomeInstance() = BaseAdInstall.homeLoadForest
+        fun getEndInstance() = BaseAdInstall.resultLoadForest
+        fun getConnectInstance() = BaseAdInstall.connectLoadForest
+        fun getBackEndInstance() = BaseAdInstall.backEndLoadForest
+        fun getBackListInstance() = BaseAdInstall.backListLoadForest
 
 
         private var idCounter = 0
     }
 
-    object InstanceHelper {
-        val openLoadFlash = BaseAd()
-        val homeLoadFlash = BaseAd()
-        val resultLoadFlash = BaseAd()
-        val connectLoadFlash = BaseAd()
-        val backEndLoadFlash = BaseAd()
-        val backListLoadFlash = BaseAd()
+    object BaseAdInstall {
+        val openLoadForest = BaseAd()
+        val homeLoadForest = BaseAd()
+        val resultLoadForest = BaseAd()
+        val connectLoadForest = BaseAd()
+        val backEndLoadForest = BaseAd()
+        val backListLoadForest = BaseAd()
     }
 
-    private val id = generateId()
+    private val id = getBaseId()
     var isFirstLoad: Boolean = false
 
-    private fun generateId(): Int {
+    private fun getBaseId(): Int {
         idCounter++
         return idCounter
     }
+    var whetherToShowForest = false
+
+    var loadTimeForest: Long = Date().time
 
     private val instanceName: String = getInstanceName()
 
-    private fun getInstanceName(): String {
-        return when (id) {
-            1 -> "open"
-            2 -> "home"
-            3 -> "end"
-            4 -> "connect"
-            5 -> "backEnd"
-            6 -> "backList"
-            else -> ""
-        }
-    }
+    var appAdDataForest: Any? = null
 
-    fun getID(adBean: FlashAdBean): String {
-        return when (id) {
-            1 -> "open+${adBean.open}"
-            2 -> "home+${adBean.mnnt}"
-            3 -> "end+${adBean.rsnt}"
-            4 -> "connect+${adBean.ctint}"
-            5 -> "backEnd+${adBean.bcintres}"
-            6 -> "backList+${adBean.bcintserv}"
-            else -> ""
-        }
-    }
-
-    var appAdDataFlash: Any? = null
-    var adView: AdView? = null
-
-    var isLoadingFlash = false
+    var isLoadingForest = false
 
 
-    var whetherToShowFlash = false
 
-    var loadTimeFlash: Long = Date().time
-
-    private fun whetherAdExceedsOneHour(loadTime: Long): Boolean =
+    private fun adGuoQi(loadTime: Long): Boolean =
         Date().time - loadTime < 60 * 60 * 1000
 
-    fun advertisementLoadingFlash(context: Context) {
-        if (isLoadingFlash) {
+    fun advertisementLoadingForest(context: Context) {
+        if (isLoadingForest) {
             Log.e(TAG, "${getInstanceName()}-The ad is loading and cannot be loaded again")
             return
         }
@@ -123,37 +94,37 @@ class BaseAd private constructor() {
             return
         }
 
-        if (appAdDataFlash == null) {
-            isLoadingFlash = true
-            loadStartupPageAdvertisementFlash(context, DataUser.getAdJson())
+        if (appAdDataForest == null) {
+            isLoadingForest = true
+            loadStartupPageAdvertisementForest(context, DataUser.getAdJson())
         }
         if ((getLoadIp().isNotEmpty()) && getLoadIp() != DataUser.connectIp) {
             Timber.e(getInstanceName() + "-ip不一致-重新加载-load_ip=" + getLoadIp() + "-now-ip=" + DataUser.connectIp)
-            whetherToShowFlash = false
-            appAdDataFlash = null
+            whetherToShowForest = false
+            appAdDataForest = null
             clearLoadIp()
-            advertisementLoadingFlash(context)
+            advertisementLoadingForest(context)
             return
         }
-        if (appAdDataFlash != null && !whetherAdExceedsOneHour(loadTimeFlash)) {
-            isLoadingFlash = true
-            loadStartupPageAdvertisementFlash(context, DataUser.getAdJson())
+        if (appAdDataForest != null && !adGuoQi(loadTimeForest)) {
+            isLoadingForest = true
+            loadStartupPageAdvertisementForest(context, DataUser.getAdJson())
         }
     }
 
 
-    private fun loadStartupPageAdvertisementFlash(context: Context, adData: FlashAdBean) {
-        Log.e(TAG, "${getInstanceName()}-Ads - start loading-id=${getID(adData)}")
+    private fun loadStartupPageAdvertisementForest(context: Context, adData: ForestAdBean) {
+        Log.e(TAG, "${getInstanceName()}-Ads - start loading-id=${getLoadId(adData)}")
         adLoaders[id]?.invoke(context, adData)
     }
 
     private val adLoaders = createAdLoadersMap()
 
-    private fun createAdLoadersMap(): Map<Int, (Context, FlashAdBean) -> Unit> {
-        val adLoadersMap = mutableMapOf<Int, (Context, FlashAdBean) -> Unit>()
+    private fun createAdLoadersMap(): Map<Int, (Context, ForestAdBean) -> Unit> {
+        val adLoadersMap = mutableMapOf<Int, (Context, ForestAdBean) -> Unit>()
 
         adLoadersMap[1] = { context, adData ->
-            loadOpenAdFlash(context, adData)
+            loadOpenAdForest(context, adData)
         }
 
         adLoadersMap[2] = { context, adData ->
@@ -165,23 +136,23 @@ class BaseAd private constructor() {
         }
 
         adLoadersMap[4] = { context, adData ->
-            loadIntAdvertisementFlash(context, adData, getConnectInstance())
+            loadIntAdvertisementForest(context, adData, getConnectInstance())
         }
 
         adLoadersMap[5] = { context, adData ->
-            loadIntAdvertisementFlash(context, adData, getBackEndInstance())
+            loadIntAdvertisementForest(context, adData, getBackEndInstance())
 
         }
 
         adLoadersMap[6] = { context, adData ->
-            loadIntAdvertisementFlash(context, adData, getBackListInstance())
+            loadIntAdvertisementForest(context, adData, getBackListInstance())
         }
 
         return adLoadersMap
     }
 
 
-    private fun loadOpenAdFlash(context: Context, adData: FlashAdBean) {
+    private fun loadOpenAdForest(context: Context, adData: ForestAdBean) {
         DataUser.openTypeIp = DataUser.connectIp
         val request = AdRequest.Builder().build()
         AppOpenAd.load(
@@ -192,16 +163,16 @@ class BaseAd private constructor() {
             object : AppOpenAd.AppOpenAdLoadCallback() {
                 override fun onAdLoaded(ad: AppOpenAd) {
                     Log.e(TAG, "open ads start loading success")
-                    getOpenInstance().isLoadingFlash = false
-                    getOpenInstance().appAdDataFlash = ad
-                    getOpenInstance().loadTimeFlash = Date().time
+                    getOpenInstance().isLoadingForest = false
+                    getOpenInstance().appAdDataForest = ad
+                    getOpenInstance().loadTimeForest = Date().time
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    getOpenInstance().isLoadingFlash = false
-                    getOpenInstance().appAdDataFlash = null
+                    getOpenInstance().isLoadingForest = false
+                    getOpenInstance().appAdDataForest = null
                     if (!isFirstLoad) {
-                        getOpenInstance().advertisementLoadingFlash(context)
+                        getOpenInstance().advertisementLoadingForest(context)
                         isFirstLoad = true
                     }
                     val error =
@@ -215,26 +186,26 @@ class BaseAd private constructor() {
     }
 
 
-    private fun advertisingOpenCallbackFlash(fullScreenFun: () -> Unit) {
-        if (getOpenInstance().appAdDataFlash !is AppOpenAd) {
+    private fun advertisingOpenCallbackForest(fullScreenFun: () -> Unit) {
+        if (getOpenInstance().appAdDataForest !is AppOpenAd) {
             return
         }
-        (getOpenInstance().appAdDataFlash as AppOpenAd).fullScreenContentCallback =
+        (getOpenInstance().appAdDataForest as AppOpenAd).fullScreenContentCallback =
             object : FullScreenContentCallback() {
                 override fun onAdDismissedFullScreenContent() {
-                    getOpenInstance().whetherToShowFlash = false
-                    getOpenInstance().appAdDataFlash = null
+                    getOpenInstance().whetherToShowForest = false
+                    getOpenInstance().appAdDataForest = null
                     fullScreenFun()
                 }
 
                 override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                    getOpenInstance().whetherToShowFlash = false
-                    getOpenInstance().appAdDataFlash = null
+                    getOpenInstance().whetherToShowForest = false
+                    getOpenInstance().appAdDataForest = null
                 }
 
                 override fun onAdShowedFullScreenContent() {
-                    getOpenInstance().appAdDataFlash = null
-                    getOpenInstance().whetherToShowFlash = true
+                    getOpenInstance().appAdDataForest = null
+                    getOpenInstance().whetherToShowForest = true
                 }
 
                 override fun onAdClicked() {
@@ -244,14 +215,14 @@ class BaseAd private constructor() {
     }
 
 
-    fun displayOpenAdvertisementFlash(
+    fun displayOpenAdvertisementForest(
         activity: AppCompatActivity,
         fullScreenFun: () -> Unit
     ): Boolean {
-        if (getOpenInstance().appAdDataFlash == null) {
+        if (getOpenInstance().appAdDataForest == null) {
             return false
         }
-        if (getOpenInstance().whetherToShowFlash || activity.lifecycle.currentState != Lifecycle.State.RESUMED) {
+        if (getOpenInstance().whetherToShowForest || activity.lifecycle.currentState != Lifecycle.State.RESUMED) {
             return false
         }
         if ((DataUser.openTypeIp.isNotEmpty()) && DataUser.openTypeIp != DataUser.connectIp) {
@@ -265,14 +236,14 @@ class BaseAd private constructor() {
             TAG,
             "open-ip一致-展示-load_ip=" + DataUser.openTypeIp + "-now-ip=" + DataUser.connectIp
         )
-        advertisingOpenCallbackFlash(fullScreenFun)
-        (getOpenInstance().appAdDataFlash as AppOpenAd).show(activity)
+        advertisingOpenCallbackForest(fullScreenFun)
+        (getOpenInstance().appAdDataForest as AppOpenAd).show(activity)
         clearLoadIp()
         return true
     }
 
 
-    private fun loadIntAdvertisementFlash(context: Context, adData: FlashAdBean, adBase: BaseAd) {
+    private fun loadIntAdvertisementForest(context: Context, adData: ForestAdBean, adBase: BaseAd) {
         val adRequest = AdRequest.Builder().build()
         var loadId = ""
         when (adBase) {
@@ -297,8 +268,8 @@ class BaseAd private constructor() {
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
-                    adBase.isLoadingFlash = false
-                    adBase.appAdDataFlash = null
+                    adBase.isLoadingForest = false
+                    adBase.appAdDataForest = null
                     val error =
                         """
            domain: ${adError.domain}, code: ${adError.code}, message: ${adError.message}
@@ -309,9 +280,9 @@ class BaseAd private constructor() {
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
                     Log.e(TAG, "${adBase.getInstanceName()}-The ad loads successfully: ")
-                    adBase.loadTimeFlash = Date().time
-                    adBase.isLoadingFlash = false
-                    adBase.appAdDataFlash = interstitialAd
+                    adBase.loadTimeForest = Date().time
+                    adBase.isLoadingForest = false
+                    adBase.appAdDataForest = interstitialAd
                     interstitialAd.setOnPaidEventListener { adValue ->
 
                     }
@@ -321,28 +292,28 @@ class BaseAd private constructor() {
 
 
     private fun intScreenAdCallback(adBase: BaseAd, closeWindowFun: () -> Unit) {
-        (adBase.appAdDataFlash as? InterstitialAd)?.fullScreenContentCallback =
+        (adBase.appAdDataForest as? InterstitialAd)?.fullScreenContentCallback =
             object : FullScreenContentCallback() {
                 override fun onAdClicked() {
                 }
 
                 override fun onAdDismissedFullScreenContent() {
-                    adBase.appAdDataFlash = null
-                    adBase.whetherToShowFlash = false
+                    adBase.appAdDataForest = null
+                    adBase.whetherToShowForest = false
                     closeWindowFun()
                 }
 
                 override fun onAdFailedToShowFullScreenContent(p0: AdError) {
-                    adBase.appAdDataFlash = null
-                    adBase.whetherToShowFlash = false
+                    adBase.appAdDataForest = null
+                    adBase.whetherToShowForest = false
                 }
 
                 override fun onAdImpression() {
                 }
 
                 override fun onAdShowedFullScreenContent() {
-                    adBase.appAdDataFlash = null
-                    adBase.whetherToShowFlash = true
+                    adBase.appAdDataForest = null
+                    adBase.whetherToShowForest = true
                 }
             }
     }
@@ -360,11 +331,11 @@ class BaseAd private constructor() {
             return 0
         }
 
-        if (adBase.appAdDataFlash == null) {
+        if (adBase.appAdDataForest == null) {
             return 1
         }
 
-        if (adBase.whetherToShowFlash || activity.lifecycle.currentState != Lifecycle.State.RESUMED) {
+        if (adBase.whetherToShowForest || activity.lifecycle.currentState != Lifecycle.State.RESUMED) {
             return 1
         }
         val vpnIp = DataUser.connectIp
@@ -378,7 +349,7 @@ class BaseAd private constructor() {
         return 2
     }
 
-    fun playIntAdvertisementFlash(
+    fun playIntAdvertisementForest(
         activity: AppCompatActivity,
         adBase: BaseAd,
         closeWindowFun: () -> Unit
@@ -390,13 +361,13 @@ class BaseAd private constructor() {
         intScreenAdCallback(adBase, closeWindowFun)
         activity.lifecycleScope.launch(Dispatchers.Main) {
             if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
-                (adBase.appAdDataFlash as InterstitialAd).show(activity)
+                (adBase.appAdDataForest as InterstitialAd).show(activity)
                 clearLoadIp()
             }
         }
     }
 
-    fun playNativeAdvertisementFlash(
+    fun playNativeAdvertisementForest(
         activity: AppCompatActivity,
         adBase: BaseAd,
     ) {
@@ -405,13 +376,13 @@ class BaseAd private constructor() {
             "${adBase.getInstanceName()}-ip一致-展示-load_ip=" + getLoadIp() + "-now-ip=" + DataUser.connectIp
         )
         if (adBase == getHomeInstance()) {
-            setDisplayHomeNativeAdFlash(activity as ZZ, adBase)
+            setDisplayHomeNativeAdForest(activity as ZZ, adBase)
         } else {
-            setDisplayEndNativeAdFlash(activity as EE, adBase)
+            setDisplayEndNativeAdForest(activity as EE, adBase)
         }
     }
 
-    private fun loadNativeAdvertisement(context: Context, adData: FlashAdBean, adBase: BaseAd) {
+    private fun loadNativeAdvertisement(context: Context, adData: ForestAdBean, adBase: BaseAd) {
         var loadId = ""
         when (adBase) {
             getHomeInstance() -> {
@@ -441,11 +412,11 @@ class BaseAd private constructor() {
 
         vpnNativeAds.withNativeAdOptions(adOptions)
         vpnNativeAds.forNativeAd {
-            adBase.appAdDataFlash = it
+            adBase.appAdDataForest = it
             Log.e(TAG, "${adBase.getInstanceName()}- ad loads successfully")
             it.setOnPaidEventListener {
                 if (adBase == getHomeInstance()) {
-                    getHomeInstance().advertisementLoadingFlash(context)
+                    getHomeInstance().advertisementLoadingForest(context)
                 }
             }
         }
@@ -457,14 +428,14 @@ class BaseAd private constructor() {
            domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}
           """"
                 Log.e(TAG, "${adBase.getInstanceName()}- ad failed to load:$error ")
-                adBase.isLoadingFlash = false
-                adBase.appAdDataFlash = null
+                adBase.isLoadingForest = false
+                adBase.appAdDataForest = null
             }
 
             override fun onAdLoaded() {
                 super.onAdLoaded()
-                adBase.loadTimeFlash = Date().time
-                adBase.isLoadingFlash = false
+                adBase.loadTimeForest = Date().time
+                adBase.isLoadingForest = false
             }
 
             override fun onAdOpened() {
@@ -478,9 +449,9 @@ class BaseAd private constructor() {
     }
 
 
-    private fun setDisplayHomeNativeAdFlash(activity: ZZ, adBase: BaseAd) {
+    private fun setDisplayHomeNativeAdForest(activity: ZZ, adBase: BaseAd) {
         activity.lifecycleScope.launch(Dispatchers.Main) {
-            (adBase.appAdDataFlash as NativeAd).let { adData ->
+            (adBase.appAdDataForest as NativeAd).let { adData ->
                 val state = activity.lifecycle.currentState == Lifecycle.State.RESUMED
 
                 if (state) {
@@ -500,17 +471,17 @@ class BaseAd private constructor() {
                     }
                     activity.binding.imgOcAd.isVisible = false
                     activity.binding.adLayoutAdmob.isVisible = true
-                    adBase.appAdDataFlash = null
-                    adBase.isLoadingFlash = false
-                    homeTypeIp = ""
+                    adBase.appAdDataForest = null
+                    adBase.isLoadingForest = false
+                    DataUser.homeTypeIp = ""
                 }
             }
         }
     }
 
-    private fun setDisplayEndNativeAdFlash(activity: EE, adBase: BaseAd) {
+    private fun setDisplayEndNativeAdForest(activity: EE, adBase: BaseAd) {
         activity.lifecycleScope.launch(Dispatchers.Main) {
-            (adBase.appAdDataFlash as NativeAd).let { adData ->
+            (adBase.appAdDataForest as NativeAd).let { adData ->
                 val state = activity.lifecycle.currentState == Lifecycle.State.RESUMED
                 if (state) {
                     activity.binding.imgOcAd.isVisible = true
@@ -529,9 +500,9 @@ class BaseAd private constructor() {
                     }
                     activity.binding.imgOcAd.isVisible = false
                     activity.binding.adLayoutAdmob.isVisible = true
-                    adBase.appAdDataFlash = null
-                    adBase.isLoadingFlash = false
-                    endTypeIp = ""
+                    adBase.appAdDataForest = null
+                    adBase.isLoadingForest = false
+                    DataUser.endTypeIp = ""
                 }
             }
         }
@@ -605,6 +576,29 @@ class BaseAd private constructor() {
             else -> {
                 ""
             }
+        }
+    }
+    private fun getInstanceName(): String {
+        return when (id) {
+            1 -> "open"
+            2 -> "home"
+            3 -> "end"
+            4 -> "connect"
+            5 -> "backEnd"
+            6 -> "backList"
+            else -> ""
+        }
+    }
+
+    private fun getLoadId(adBean: ForestAdBean): String {
+        return when (id) {
+            1 -> "open+${adBean.open}"
+            2 -> "home+${adBean.mnnt}"
+            3 -> "end+${adBean.rsnt}"
+            4 -> "connect+${adBean.ctint}"
+            5 -> "backEnd+${adBean.bcintres}"
+            6 -> "backList+${adBean.bcintserv}"
+            else -> ""
         }
     }
 }

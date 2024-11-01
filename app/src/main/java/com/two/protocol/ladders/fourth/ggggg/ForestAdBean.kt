@@ -1,10 +1,9 @@
 package com.two.protocol.ladders.fourth.ggggg
 
-import android.graphics.drawable.Drawable
 import androidx.annotation.Keep
 
 @Keep
-data class FlashAdBean(
+data class ForestAdBean(
     val open: String,
     val mnnt: String,
     val rsnt: String,
@@ -19,7 +18,7 @@ data class FlashAdBean(
 )
 
 @Keep
-data class FlashLogicBean(
+data class ForestLogicBean(
     val dda: String,
     val pkk: String,
     val eed: String,

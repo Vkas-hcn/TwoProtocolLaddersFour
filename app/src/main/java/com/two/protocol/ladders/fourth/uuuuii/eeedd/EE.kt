@@ -96,8 +96,8 @@ class EE : AppCompatActivity() {
                 nextFun()
                 return@launch
             }
-            if(baseAd.appAdDataFlash==null){
-                baseAd.advertisementLoadingFlash(this@EE)
+            if(baseAd.appAdDataForest==null){
+                baseAd.advertisementLoadingForest(this@EE)
             }
             val startTime = System.currentTimeMillis()
             var elapsedTime: Long
@@ -113,7 +113,7 @@ class EE : AppCompatActivity() {
                         backJob?.cancel()
                         backJob = null
                         binding.showLoad = false
-                        baseAd.playIntAdvertisementFlash(
+                        baseAd.playIntAdvertisementForest(
                             this@EE,
                             baseAd,
                             closeWindowFun = {
@@ -139,7 +139,7 @@ class EE : AppCompatActivity() {
         }
         binding.adLayout.isVisible = true
         binding.imgOcAd.isVisible = true
-        baseAd.advertisementLoadingFlash(this)
+        baseAd.advertisementLoadingForest(this)
         if (baseAd.canShowAd(this@EE, baseAd) == 0) {
             endJob?.cancel()
             endJob = null
@@ -149,7 +149,7 @@ class EE : AppCompatActivity() {
             while (isActive) {
                 delay(500L)
                 if (baseAd.canShowAd(this@EE, baseAd) == 2) {
-                    baseAd.playNativeAdvertisementFlash(this@EE,baseAd)
+                    baseAd.playNativeAdvertisementForest(this@EE,baseAd)
                     endJob?.cancel()
                     endJob = null
                     break
