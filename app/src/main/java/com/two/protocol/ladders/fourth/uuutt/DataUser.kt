@@ -16,6 +16,11 @@ import com.two.protocol.ladders.fourth.ggggg.ForestLogicBean
 object DataUser {
     const val TAG = "TWO"
     const val ppUrl = "https://www.wanandroid.com/"
+    val tba_url = if (BuildConfig.DEBUG) {
+        "https://test-hardware.foreststable.com/overt/fleck/israel"
+    } else {
+        "https://hardware.foreststable.com/donald/devious"
+    }
     private const val upValue = "upValue"
     private const val downValue = "downValue"
     private const val protocolValue = "protocolValue"
@@ -24,6 +29,7 @@ object DataUser {
     private const val chooneService = "chooneService"
     private const val isCloneGuide = "isCloneGuide"
     private const val codeCon = "codeCon"
+    private const val localIpKey = "localIpKey"
     private const val timeEd = "timeEd"
     private const val blockDataKey = "blockDataKey"
     private const val postUUIDKey = "postUUIDKey"
@@ -34,6 +40,7 @@ object DataUser {
     const val oooTzKey = "hiw"
 
     var connectIp = ""
+    var connectCity = ""
     var openTypeIp = ""
     var homeTypeIp = ""
     var endTypeIp = ""
@@ -98,6 +105,14 @@ object DataUser {
                 insertData(codeCon, it)
             }
         }
+
+    var localIp: String?
+        get() = queryData(localIpKey)
+        set(value) {
+            value?.let {
+                insertData(localIpKey, it)
+            }
+        }
     var isCloneGuideKey: String?
         get() = queryData(isCloneGuide)
         set(value) {
@@ -144,6 +159,22 @@ object DataUser {
         set(value) {
             value?.let {
                 insertData(downValue, it)
+            }
+        }
+
+    var installUpState: String?
+        get() = queryData("install_up_state")
+        set(value) {
+            value?.let {
+                insertData("install_up_state", it)
+            }
+        }
+
+    var ajState: String?
+        get() = queryData("ajState")
+        set(value) {
+            value?.let {
+                insertData("ajState", it)
             }
         }
 

@@ -1,6 +1,7 @@
 package com.two.protocol.ladders.fourth.ggggg
 
 import android.content.Context
+import android.provider.ContactsContract.Data
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -13,6 +14,7 @@ import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdLoader
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdValue
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
@@ -24,6 +26,8 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.two.protocol.ladders.fourth.R
+import com.two.protocol.ladders.fourth.uuutt.DataUpMix
+import com.two.protocol.ladders.fourth.uuutt.DataUpMix.log
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.DataUser.TAG
 import com.two.protocol.ladders.fourth.uuutt.VPNGet
@@ -59,11 +63,17 @@ class BaseAd private constructor() {
 
     private val id = getBaseId()
     var isFirstLoad: Boolean = false
-
+    private var adDataOpen: ForestAdBean? = null
+    private var adDataHome: ForestAdBean? = null
+    private var adDataResult: ForestAdBean? = null
+    private var adDataCont: ForestAdBean? = null
+    private var adDataList: ForestAdBean? = null
+    private var adDataEnd: ForestAdBean? = null
     private fun getBaseId(): Int {
         idCounter++
         return idCounter
     }
+
     var whetherToShowForest = false
 
     var loadTimeForest: Long = Date().time
@@ -73,7 +83,6 @@ class BaseAd private constructor() {
     var appAdDataForest: Any? = null
 
     var isLoadingForest = false
-
 
 
     private fun adGuoQi(loadTime: Long): Boolean =
@@ -114,7 +123,8 @@ class BaseAd private constructor() {
 
 
     private fun loadStartupPageAdvertisementForest(context: Context, adData: ForestAdBean) {
-        Log.e(TAG, "${getInstanceName()}-Ads - start loading-id=${getLoadId(adData)}")
+        Log.e(TAG, "${getInstanceName()}-Ads - start loading-id=${getLoadIdLog(adData)}")
+        DataUpMix.abcAsk(getInstanceName(),getLoadId(adData))
         adLoaders[id]?.invoke(context, adData)
     }
 
@@ -154,6 +164,7 @@ class BaseAd private constructor() {
 
     private fun loadOpenAdForest(context: Context, adData: ForestAdBean) {
         DataUser.openTypeIp = DataUser.connectIp
+        adDataOpen = DataUpMix.beforeLoadLink(adData)
         val request = AdRequest.Builder().build()
         AppOpenAd.load(
             context,
@@ -166,6 +177,17 @@ class BaseAd private constructor() {
                     getOpenInstance().isLoadingForest = false
                     getOpenInstance().appAdDataForest = ad
                     getOpenInstance().loadTimeForest = Date().time
+                    DataUpMix.abcGett(getInstanceName(),getLoadId(adData),getLoadIp())
+                    ad.setOnPaidEventListener { adValue ->
+                            DataUpMix.postAdData(
+                                adValue,
+                                ad.responseInfo,
+                                adDataOpen!!,
+                                adData.open,
+                                "open",
+                                "open"
+                            )
+                    }
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
@@ -180,6 +202,7 @@ class BaseAd private constructor() {
            domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}
           """"
                     Log.e(TAG, "open ads start loading Failed=${error}")
+                    DataUpMix.abcAskdis(getInstanceName(),getLoadId(adData),getLoadIp(),error)
                 }
             }
         )
@@ -238,6 +261,8 @@ class BaseAd private constructor() {
         )
         advertisingOpenCallbackForest(fullScreenFun)
         (getOpenInstance().appAdDataForest as AppOpenAd).show(activity)
+        adDataOpen = DataUpMix.afterLoadLink(adDataOpen!!)
+        DataUpMix.abcView(getInstanceName(),getLoadId(adDataOpen!!),getLoadIp())
         clearLoadIp()
         return true
     }
@@ -250,16 +275,20 @@ class BaseAd private constructor() {
             getConnectInstance() -> {
                 DataUser.contTypeIp = DataUser.connectIp
                 loadId = adData.ctint
+                adDataCont = DataUpMix.beforeLoadLink(adData)
+
             }
 
             getBackEndInstance() -> {
                 DataUser.backEndTypeIp = DataUser.connectIp
                 loadId = adData.bcintres
+                adDataEnd = DataUpMix.beforeLoadLink(adData)
             }
 
             getBackListInstance() -> {
                 DataUser.backListTypeIp = DataUser.connectIp
                 loadId = adData.bcintserv
+                adDataList = DataUpMix.beforeLoadLink(adData)
             }
         }
         InterstitialAd.load(
@@ -275,7 +304,7 @@ class BaseAd private constructor() {
            domain: ${adError.domain}, code: ${adError.code}, message: ${adError.message}
           """
                     Log.e(TAG, "${adBase.getInstanceName()}-The ad failed to load:$error ")
-
+                    DataUpMix.abcAskdis(getInstanceName(),getLoadId(adData),getLoadIp(),error)
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
@@ -283,13 +312,59 @@ class BaseAd private constructor() {
                     adBase.loadTimeForest = Date().time
                     adBase.isLoadingForest = false
                     adBase.appAdDataForest = interstitialAd
-                    interstitialAd.setOnPaidEventListener { adValue ->
-
-                    }
+                    DataUpMix.abcGett(getInstanceName(),getLoadId(adData),getLoadIp())
+                    getIntData(interstitialAd, loadId, adBase)
                 }
             })
     }
 
+    fun getIntData(ad: InterstitialAd, loadId: String, adBase: BaseAd) {
+        val bean = when (adBase) {
+            getConnectInstance() -> {
+                adDataCont
+            }
+
+            getBackEndInstance() -> {
+                adDataEnd
+            }
+
+            getBackListInstance() -> {
+                adDataList
+            }
+
+            else -> {
+                null
+            }
+        }
+        val adWhere = when (adBase) {
+            getConnectInstance() -> {
+                "ctint"
+            }
+
+            getBackEndInstance() -> {
+                "bcintres"
+            }
+
+            getBackListInstance() -> {
+                "bcintserv"
+            }
+
+            else -> {
+                ""
+            }
+        }
+        ad.setOnPaidEventListener { adValue ->
+            log("插屏广告 -${adWhere}，开始上报: ")
+            DataUpMix.postAdData(
+                adValue,
+                ad.responseInfo,
+                bean!!,
+                loadId,
+                adWhere,
+                "int"
+            )
+        }
+    }
 
     private fun intScreenAdCallback(adBase: BaseAd, closeWindowFun: () -> Unit) {
         (adBase.appAdDataForest as? InterstitialAd)?.fullScreenContentCallback =
@@ -362,6 +437,22 @@ class BaseAd private constructor() {
         activity.lifecycleScope.launch(Dispatchers.Main) {
             if (activity.lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 (adBase.appAdDataForest as InterstitialAd).show(activity)
+                when (adBase) {
+                    getConnectInstance() -> {
+                        adDataCont = DataUpMix.afterLoadLink(adDataCont!!)
+                        DataUpMix.abcView(getInstanceName(),getLoadId(adDataCont!!),getLoadIp())
+                    }
+
+                    getBackEndInstance() -> {
+                        adDataEnd = DataUpMix.afterLoadLink(adDataEnd!!)
+                        DataUpMix.abcView(getInstanceName(),getLoadId(adDataEnd!!),getLoadIp())
+                    }
+
+                    getBackListInstance() -> {
+                        adDataList = DataUpMix.afterLoadLink(adDataList!!)
+                        DataUpMix.abcView(getInstanceName(),getLoadId(adDataList!!),getLoadIp())
+                    }
+                }
                 clearLoadIp()
             }
         }
@@ -388,11 +479,13 @@ class BaseAd private constructor() {
             getHomeInstance() -> {
                 DataUser.homeTypeIp = DataUser.connectIp
                 loadId = adData.mnnt
+                adDataHome = DataUpMix.beforeLoadLink(adData)
             }
 
             getEndInstance() -> {
                 DataUser.endTypeIp = DataUser.connectIp
                 loadId = adData.rsnt
+                adDataResult = DataUpMix.beforeLoadLink(adData)
             }
         }
         Log.e(TAG, "loadNativeAdvertisement: $loadId")
@@ -414,7 +507,9 @@ class BaseAd private constructor() {
         vpnNativeAds.forNativeAd {
             adBase.appAdDataForest = it
             Log.e(TAG, "${adBase.getInstanceName()}- ad loads successfully")
-            it.setOnPaidEventListener {
+            DataUpMix.abcGett(getInstanceName(),getLoadId(adData),getLoadIp())
+            it.setOnPaidEventListener { adva ->
+                getNatData(it,adva, loadId, adBase)
                 if (adBase == getHomeInstance()) {
                     getHomeInstance().advertisementLoadingForest(context)
                 }
@@ -430,6 +525,7 @@ class BaseAd private constructor() {
                 Log.e(TAG, "${adBase.getInstanceName()}- ad failed to load:$error ")
                 adBase.isLoadingForest = false
                 adBase.appAdDataForest = null
+                DataUpMix.abcAskdis(getInstanceName(),getLoadId(adData),getLoadIp(),error)
             }
 
             override fun onAdLoaded() {
@@ -448,6 +544,45 @@ class BaseAd private constructor() {
         }).build().loadAd(AdRequest.Builder().build())
     }
 
+    private fun getNatData(ad: NativeAd, adValue: AdValue, loadId: String, adBase: BaseAd) {
+        val bean = when (adBase) {
+            getHomeInstance() -> {
+                adDataHome
+            }
+
+            getEndInstance() -> {
+                adDataResult
+            }
+
+            else -> {
+                null
+            }
+        }
+        val adWhere = when (adBase) {
+            getHomeInstance() -> {
+                "mnnt"
+            }
+
+            getEndInstance() -> {
+                "rsnt"
+            }
+
+            else -> {
+                ""
+            }
+        }
+            log("原生广告 -${adWhere}，开始上报: ")
+            ad.responseInfo?.let {
+                DataUpMix.postAdData(
+                    adValue,
+                    it,
+                    bean!!,
+                    loadId,
+                    adWhere,
+                    "native"
+                )
+            }
+    }
 
     private fun setDisplayHomeNativeAdForest(activity: ZZ, adBase: BaseAd) {
         activity.lifecycleScope.launch(Dispatchers.Main) {
@@ -469,11 +604,14 @@ class BaseAd private constructor() {
                         removeAllViews()
                         addView(adView)
                     }
+                    DataUpMix.abcView(getInstanceName(),getLoadId(adDataHome!!),getLoadIp())
                     activity.binding.imgOcAd.isVisible = false
                     activity.binding.adLayoutAdmob.isVisible = true
                     adBase.appAdDataForest = null
                     adBase.isLoadingForest = false
                     DataUser.homeTypeIp = ""
+                    adDataHome = DataUpMix.afterLoadLink(adDataHome!!)
+
                 }
             }
         }
@@ -498,11 +636,13 @@ class BaseAd private constructor() {
                         removeAllViews()
                         addView(adView)
                     }
+                    DataUpMix.abcView(getInstanceName(),getLoadId(adDataResult!!),getLoadIp())
                     activity.binding.imgOcAd.isVisible = false
                     activity.binding.adLayoutAdmob.isVisible = true
                     adBase.appAdDataForest = null
                     adBase.isLoadingForest = false
                     DataUser.endTypeIp = ""
+                    adDataResult = DataUpMix.afterLoadLink(adDataResult!!)
                 }
             }
         }
@@ -578,6 +718,7 @@ class BaseAd private constructor() {
             }
         }
     }
+
     private fun getInstanceName(): String {
         return when (id) {
             1 -> "open"
@@ -590,7 +731,7 @@ class BaseAd private constructor() {
         }
     }
 
-    private fun getLoadId(adBean: ForestAdBean): String {
+    private fun getLoadIdLog(adBean: ForestAdBean): String {
         return when (id) {
             1 -> "open+${adBean.open}"
             2 -> "home+${adBean.mnnt}"
@@ -598,6 +739,17 @@ class BaseAd private constructor() {
             4 -> "connect+${adBean.ctint}"
             5 -> "backEnd+${adBean.bcintres}"
             6 -> "backList+${adBean.bcintserv}"
+            else -> ""
+        }
+    }
+    private fun getLoadId(adBean: ForestAdBean): String {
+        return when (id) {
+            1 -> adBean.open
+            2 -> adBean.mnnt
+            3 -> adBean.rsnt
+            4 -> adBean.ctint
+            5 -> adBean.bcintres
+            6 -> adBean.bcintserv
             else -> ""
         }
     }

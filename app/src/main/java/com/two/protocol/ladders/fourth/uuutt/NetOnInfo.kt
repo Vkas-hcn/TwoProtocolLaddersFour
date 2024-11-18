@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
+import com.google.android.gms.common.util.DataUtils
 import com.two.protocol.ladders.fourth.BuildConfig
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ
 import com.two.protocol.ladders.fourth.uuutt.DataUser.log
@@ -13,6 +14,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.BufferedReader
+import java.io.BufferedWriter
+import java.io.IOException
 import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.HttpURLConnection
@@ -34,7 +37,9 @@ object NetOnInfo {
                 countryCode = jsonObject.getString("cc")
             )
             DataUser.codeConKey = jsonObject.getString("cc")
-
+            if(!ZZZ.saoState){
+                DataUser.localIp = jsonObject.getString("ip")
+            }
         } else {
             val secondaryResponse = fetchIPInfo(secondaryUrl)
             if (secondaryResponse != null) {
@@ -53,6 +58,9 @@ object NetOnInfo {
                     countryLong = jsonObject.getString("country_long")
                 )
                 DataUser.codeConKey = jsonObject.getString("country_short")
+                if(!ZZZ.saoState){
+                    DataUser.localIp = jsonObject.getString("ip")
+                }
             }
         }
     }
@@ -194,55 +202,6 @@ object NetOnInfo {
         fun onSuccess(response: String)
         fun onFailure(error: String)
     }
-
-    private fun getMapData(
-        url: String,
-        map: Map<String, Any>,
-        callback: ResponseCallback
-    ) {
-        val queryParameters = StringBuilder()
-        for ((key, value) in map) {
-            queryParameters.append("&")
-            queryParameters.append(URLEncoder.encode(key, "UTF-8"))
-            queryParameters.append("=")
-            queryParameters.append(URLEncoder.encode(value.toString(), "UTF-8"))
-        }
-
-        val urlString = if (url.contains("?")) {
-            "$url&$queryParameters"
-        } else {
-            "$url?$queryParameters"
-        }
-        val urlObj = URL(urlString)
-        val connection = urlObj.openConnection() as HttpURLConnection
-        connection.requestMethod = "GET"
-        connection.connectTimeout = 12000
-
-        try {
-            val responseCode = connection.responseCode
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                val inputStream = connection.inputStream
-                val reader = BufferedReader(InputStreamReader(inputStream))
-                val response = StringBuilder()
-                var line: String?
-                while (reader.readLine().also { line = it } != null) {
-                    response.append(line)
-                }
-                reader.close()
-                inputStream.close()
-                callback.onSuccess(response.toString())
-            } else {
-                callback.onFailure("HTTP error: $responseCode")
-            }
-        } catch (e: Exception) {
-            callback.onFailure("Network error: ${e.message}")
-        } finally {
-            connection.disconnect()
-        }
-    }
-
-
-
     private fun postMapData(
         url: String,
         map: Map<String, Any>,
@@ -285,5 +244,37 @@ object NetOnInfo {
             connection.disconnect()
         }
     }
+    fun postInformation(body: Any, callback: ResponseCallback) {
+        Thread {
+            var connection: HttpURLConnection? = null
+            try {
+                val urlConnection = URL(DataUser.tba_url).openConnection() as HttpURLConnection
+                connection = urlConnection
+                connection.requestMethod = "POST"
+                connection.setRequestProperty("Content-Type", "application/json; charset=UTF-8")
+                connection.setRequestProperty("Accept", "application/json")
+                connection.doOutput = true
+                connection.doInput = true
 
+                // Write body to the request
+                BufferedWriter(OutputStreamWriter(connection.outputStream, "UTF-8")).use { writer ->
+                    writer.write(body.toString())
+                    writer.flush()
+                }
+
+                val responseCode = connection.responseCode
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    val responseBody = connection.inputStream.bufferedReader().use { it.readText() }
+                    callback.onSuccess(responseBody)
+                } else {
+                    val errorBody = connection.errorStream.bufferedReader().use { it.readText() }
+                    callback.onFailure(errorBody)
+                }
+            } catch (e: IOException) {
+                callback.onFailure("Network error: ${e.message}")
+            } finally {
+                connection?.disconnect()
+            }
+        }.start()
+    }
 }

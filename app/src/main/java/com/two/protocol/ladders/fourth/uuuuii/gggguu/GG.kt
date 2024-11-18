@@ -27,10 +27,12 @@ import com.two.protocol.ladders.fourth.BuildConfig
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ
 import com.two.protocol.ladders.fourth.databinding.ActivityFirstBinding
 import com.two.protocol.ladders.fourth.ggggg.BaseAd
+import com.two.protocol.ladders.fourth.uuutt.DataUpMix
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.DataUser.getLogicJson
 import com.two.protocol.ladders.fourth.uuutt.VPNGet
 import com.two.protocol.ladders.fourth.uuuuii.zzzzzz.ZZ
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.TimeoutCancellationException
@@ -50,6 +52,9 @@ class GG : AppCompatActivity() {
         setContentView(binding.root)
         updateUserOpinions()
         initTime()
+        lifecycleScope.launch(Dispatchers.IO) {
+            DataUpMix.postSessionData()
+        }
         onBackPressedDispatcher.addCallback(this) {
         }
     }

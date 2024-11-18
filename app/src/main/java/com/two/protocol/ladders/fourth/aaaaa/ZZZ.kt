@@ -7,16 +7,24 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Process
+import android.provider.Settings
 import android.util.Log
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ProcessLifecycleOwner
+import com.adjust.sdk.Adjust
+import com.adjust.sdk.AdjustConfig
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
 import com.github.shadowsocks.Core
 import com.google.android.gms.ads.AdActivity
 import com.google.firebase.FirebaseApp
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
+import com.two.protocol.ladders.fourth.BuildConfig
+import com.two.protocol.ladders.fourth.uuutt.DataUpMix
+import com.two.protocol.ladders.fourth.uuutt.DataUpMix.log
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.NetOnInfo
 import com.two.protocol.ladders.fourth.uuuuii.gggguu.GG
@@ -25,9 +33,10 @@ import de.blinkt.openvpn.OpenContentProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
 
-class ZZZ : Application() , Application.ActivityLifecycleCallbacks, LifecycleObserver {
+class ZZZ : Application(), Application.ActivityLifecycleCallbacks, LifecycleObserver {
     companion object {
         lateinit var appContext: Context
         var saoState = false
@@ -35,7 +44,10 @@ class ZZZ : Application() , Application.ActivityLifecycleCallbacks, LifecycleObs
         var jumpToHomeType = "0"
         var nowVpnUI = 0
         var isInBackground = false
+        var nowAName: String? = null
+
     }
+
     var adActivity: Activity? = null
     var lastBackgroundTime: Long = 0
     override fun onCreate() {
@@ -51,6 +63,10 @@ class ZZZ : Application() , Application.ActivityLifecycleCallbacks, LifecycleObs
             CoroutineScope(Dispatchers.IO).launch {
                 NetOnInfo.getIPInfo()
                 NetOnInfo.getBlackList(this@ZZZ)
+                RRRRDDDT()
+                withContext(Dispatchers.Main){
+                    initAdJust()
+                }
             }
             if (DataUser.postUUID.isNullOrBlank()) {
                 DataUser.postUUID = UUID.randomUUID().toString()
@@ -82,10 +98,13 @@ class ZZZ : Application() , Application.ActivityLifecycleCallbacks, LifecycleObs
     override fun onActivityStarted(activity: Activity) {
         if (activity is AdActivity) {
             adActivity = activity
+        }else{
+            nowAName = activity.javaClass.simpleName
         }
     }
 
     override fun onActivityResumed(activity: Activity) {
+        Adjust.onResume()
         if (isInBackground) {
             isInBackground = false
             val currentTime = System.currentTimeMillis()
@@ -97,9 +116,11 @@ class ZZZ : Application() , Application.ActivityLifecycleCallbacks, LifecycleObs
     }
 
     override fun onActivityPaused(activity: Activity) {
+        Adjust.onPause()
     }
 
     override fun onActivityStopped(activity: Activity) {
+
     }
 
     override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
@@ -129,5 +150,61 @@ class ZZZ : Application() , Application.ActivityLifecycleCallbacks, LifecycleObs
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         startActivity(intent)
         activity.finish()
+    }
+
+    private fun RRRRDDDT() {
+        runCatching {
+            val referrerClient = InstallReferrerClient.newBuilder(this).build()
+            referrerClient.startConnection(object : InstallReferrerStateListener {
+                override fun onInstallReferrerSetupFinished(p0: Int) {
+                    when (p0) {
+                        InstallReferrerClient.InstallReferrerResponse.OK -> {
+                            referrerClient.installReferrer?.run {
+                                if (DataUser.installUpState != "1") {
+                                    log("onInstallReferrerSetupFinished: ")
+                                    DataUpMix.postInstallJson(this)
+                                }
+                            }
+                        }
+                    }
+                    referrerClient.endConnection()
+                }
+
+                override fun onInstallReferrerServiceDisconnected() {
+                }
+            })
+        }.onFailure { e ->
+        }
+    }
+
+    private fun initAdJust() {
+        Adjust.addSessionCallbackParameter(
+            "customer_user_id",
+            DataUser.postUUID
+        )
+        val appToken = if (BuildConfig.DEBUG) {
+            "ih2pm2dr3k74"
+        } else {
+            "cdd93w9cc3y8"
+        }
+        val environment = if (BuildConfig.DEBUG) {
+            AdjustConfig.ENVIRONMENT_SANDBOX
+        } else {
+            AdjustConfig.ENVIRONMENT_PRODUCTION
+        }
+
+        val config = AdjustConfig(this, appToken, environment)
+        config.needsCost = true
+        config.setOnAttributionChangedListener { attribution ->
+            log("adjust=${attribution}")
+            if (DataUser.ajState != "1" && attribution.network.isNotEmpty() && attribution.network.contains(
+                    "organic",
+                    true
+                ).not()
+            ) {
+                DataUser.ajState = "1"
+            }
+        }
+        Adjust.onCreate(config)
     }
 }

@@ -35,6 +35,7 @@ import com.two.protocol.ladders.fourth.R
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ
 import com.two.protocol.ladders.fourth.databinding.ActivityMainBinding
 import com.two.protocol.ladders.fourth.ggggg.BaseAd
+import com.two.protocol.ladders.fourth.uuutt.DataUpMix
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.DataUser.getSaturnImage
 import com.two.protocol.ladders.fourth.uuutt.GlobalTimer
@@ -288,9 +289,12 @@ class ZZ : AppCompatActivity(),
         if (DataUser.protocolValueKey != "3") {
             val connectNowVpn = Gson().fromJson(DataUser.nowServiceKey, VpnServerBean::class.java)
             DataUser.connectIp = connectNowVpn.ip
+            DataUser.connectCity = connectNowVpn.city
             Core.startService()
+            DataUpMix.postPointData("c_real_connect", "type", "ss")
         } else {
             openVTool()
+            DataUpMix.postPointData("c_real_connect", "type", "open")
         }
     }
 
@@ -315,6 +319,7 @@ class ZZ : AppCompatActivity(),
         if (state.name == "Connected") {
             ZZZ.saoState = true
             connectSuccessFun()
+            DataUpMix.postPointData("c_su_connet", "type", "ss")
         }
         if (state.name == "Stopped") {
             disConnectEndPage()
@@ -344,6 +349,7 @@ class ZZ : AppCompatActivity(),
                     "CONNECTED" -> {
                         ZZZ.saoState = true
                         connectSuccessFun()
+                        DataUpMix.postPointData("c_su_connet", "type", "open")
                     }
 
                     "CONNECTING" -> {
@@ -358,6 +364,7 @@ class ZZ : AppCompatActivity(),
                             "Connection failed, please try again!",
                             Toast.LENGTH_SHORT
                         ).show()
+                        DataUpMix.postPointData("c_dissu_connect", "type", "open","IP", DataUser.connectIp)
                     }
 
                     "NOPROCESS" -> {
@@ -517,6 +524,7 @@ class ZZ : AppCompatActivity(),
                 val vpnNowBean =
                     Gson().fromJson(DataUser.nowServiceKey, VpnServerBean::class.java)
                 DataUser.connectIp = vpnNowBean.ip
+                DataUser.connectCity = vpnNowBean.city
                 Log.e("TAG", "Vpn Service information-open: =${Gson().toJson(vpnNowBean)}")
                 val conf = if (BuildConfig.DEBUG) {
                     this@ZZ.assets.open("fast_ippooltest.ovpn")
