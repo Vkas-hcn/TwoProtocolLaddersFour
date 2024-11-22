@@ -178,6 +178,69 @@ object DataUser {
             }
         }
 
+    var refData: String?
+        get() = queryData("refData")
+        set(value) {
+            value?.let {
+                insertData("refData", it)
+            }
+        }
+
+    var bbb_admin: String?
+        get() = queryData("bbb_admin")
+        set(value) {
+            value?.let {
+                insertData("bbb_admin", it)
+            }
+        }
+    var rrr_admin: String?
+        get() = queryData("rrr_admin")
+        set(value) {
+            value?.let {
+                insertData("rrr_admin", it)
+            }
+        }
+
+    var bus: String?
+        get() = queryData("bus")
+        set(value) {
+            value?.let {
+                insertData("bus", it)
+            }
+        }
+
+    var local_s_n :Int?
+        get() = queryData("local_s_n")?.toInt()
+        set(value) {
+            value?.let {
+                insertData("local_s_n", it.toString())
+            }
+        }
+
+    var local_c_n :Int?
+        get() = queryData("local_c_n")?.toInt()
+        set(value) {
+            value?.let {
+                insertData("local_c_n", it.toString())
+            }
+        }
+
+    var ad_load_date: String?
+        get() = queryData("ad_load_date")
+        set(value) {
+            value?.let {
+                insertData("ad_load_date", it)
+            }
+        }
+
+    var adLimState: String?
+        get() = queryData("adLimState")
+        set(value) {
+            value?.let {
+                insertData("adLimState", it)
+            }
+        }
+
     private fun insertData(key: String, value: String) {
         val values = ContentValues().apply {
             put("key_name", key)
@@ -277,21 +340,24 @@ object DataUser {
         }
     }
 
-    fun blockAdBlacklist(): Boolean {
-        when (getLogicJson().pkk) {
-            "1" -> {
-                return blockData != "booty"
-            }
+fun blockAdBlacklist(): Boolean {
+    val logicJson = getLogicJson() ?: return true
+    val pkk = logicJson.pkk ?: return true
 
-            "2" -> {
-                return false
-            }
-
-            else -> {
-                return true
-            }
-        }
+    val res = when (pkk) {
+        "1" -> blockData != "booty"
+        "2" -> false
+        else -> true
     }
+
+    if (bus != "OK" && !res) {
+        DataUpMix.postPointData("u_whitelist")
+        bus = "OK"
+    }
+
+    return res
+}
+
 
     fun parseTwoNumbers(callback: (first: Int, second: Int) -> Unit) {
         val default = 10
@@ -321,16 +387,21 @@ object DataUser {
             )
         }
     }
+    fun getAdmobIdList(adList:String):Array<String>{
+       return adList.split(",").toTypedArray()
+    }
 
     // 本地广告数据
     const val local_ad_data = """
 {
-  "open":"ca-app-pub-3940256099942544/9257395921",
-  "mnnt":"ca-app-pub-3940256099942544/2247696110",
-  "rsnt":"ca-app-pub-3940256099942544/2247696110",
-  "ctint":"ca-app-pub-3940256099942544/1033173712",
-  "bcintserv":"ca-app-pub-3940256099942544/1033173712",
-  "bcintres":"ca-app-pub-3940256099942544/1033173712"
+  "ffftt_skhjg":40,
+  "ffftt_csadf":2,
+  "open":"ca-app-pub-3940256099942544/9257395921,ca-app-pub-3940256099942544/9257395921x",
+  "mnnt":"ca-app-pub-3940256099942544/2247696110,ca-app-pub-3940256099942544/2247696111",
+  "rsnt":"ca-app-pub-3940256099942544/2247696110,ca-app-pub-3940256099942544/2247696111",
+  "ctint":"ca-app-pub-3940256099942544/1033173712,ca-app-pub-3940256099942544/1033173713",
+  "bcintserv":"ca-app-pub-3940256099942544/1033173712,ca-app-pub-3940256099942544/1033173713",
+  "bcintres":"ca-app-pub-3940256099942544/1033173712,ca-app-pub-3940256099942544/1033173713"
 }
     """
 

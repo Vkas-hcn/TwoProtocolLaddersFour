@@ -135,10 +135,11 @@ object NetOnInfo {
     }
 
     fun showDueDialog(context: Context): Boolean {
-        if (BuildConfig.DEBUG) {
-            return false
-        }
+//        if (BuildConfig.DEBUG) {
+//            return false
+//        }
         if (shouldIntercept(context)) {
+            DataUpMix.postPointData("u_area_limit", "cy", DataUser.codeConKey)
             AlertDialog.Builder(context).apply {
                 setTitle("WARN")
                 setMessage("Due to the policy reason , this service is not available in your country")

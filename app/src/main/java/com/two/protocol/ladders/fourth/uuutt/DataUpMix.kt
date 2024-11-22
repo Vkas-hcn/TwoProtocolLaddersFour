@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.os.Bundle
 import android.util.Log
 import android.webkit.WebSettings
 import com.adjust.sdk.Adjust
@@ -12,9 +13,11 @@ import com.adjust.sdk.AdjustAdRevenue
 import com.adjust.sdk.AdjustConfig
 import com.android.installreferrer.api.ReferrerDetails
 import com.facebook.appevents.AppEventsLogger.Companion.newLogger
+import com.github.shadowsocks.utils.Key.name
 import com.google.android.gms.ads.AdValue
 import com.google.android.gms.ads.ResponseInfo
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.two.protocol.ladders.fourth.BuildConfig
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ.Companion.appContext
@@ -40,7 +43,7 @@ object DataUpMix {
     fun getAppVersion(): String {
         try {
             val packageInfo =
-                ZZZ.appContext.packageManager.getPackageInfo(appContext.packageName, 0)
+                appContext.packageManager.getPackageInfo(appContext.packageName, 0)
             val str = packageInfo.versionName
             Intrinsics.checkNotNullExpressionValue(str, "packageInfo.versionName")
             return str
@@ -70,7 +73,7 @@ object DataUpMix {
                 //operator
                 put("jeannie", "111")
                 //android_id
-                put("cesare", "1")
+                put("invoice", "1")
             })
             put("teetotal", JSONObject().apply {
                 //client_ts
@@ -78,7 +81,11 @@ object DataUpMix {
                 //distinct_id
                 put("dedicate", DataUser.postUUID)
                 //shabby gaid
-                put("shabby",  (runCatching { AdvertisingIdClient.getAdvertisingIdInfo(appContext).id }.getOrNull() ?: ""))
+                put(
+                    "shabby",
+                    (runCatching { AdvertisingIdClient.getAdvertisingIdInfo(appContext).id }.getOrNull()
+                        ?: "")
+                )
                 //system_language
                 put("jacobean", Locale.getDefault().language + '_' + Locale.getDefault().country)
             })
@@ -367,53 +374,40 @@ object DataUpMix {
                     log("${name}-打点事件上报-失败=$error")
                 }
             })
+            pointFaceBook()
         } catch (e: java.lang.Exception) {
             log("${name}-打点事件上报-失败=$e")
         }
     }
 
-//    fun isNetworkAvailable(): Boolean {
-//        val connectivityManager = appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            val network = connectivityManager.activeNetwork ?: return false
-//            val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-//            return when {
-//                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-//                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-//                activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
-//                else -> false
-//            }
-//        } else {
-//            @Suppress("DEPRECATION")
-//            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
-//            @Suppress("DEPRECATION")
-//            return networkInfo.isConnected
-//        }
-//    }
-
-    fun pingIPAddress(ip: String): String? {
-        val command = if (System.getProperty("os.name").startsWith("Windows")) {
-            "ping -n 1 $ip"
-        } else {
-            "ping -c 1 $ip"
+    private fun pointFaceBook(
+        key1: String? = null,
+        keyValue1: Any? = null,
+        key2: String? = null,
+        keyValue2: Any? = null,
+        key3: String? = null,
+        keyValue3: Any? = null,
+        key4: String? = null,
+        keyValue4: Any? = null
+    ) {
+        if (DataUser.getLogicJson().dda.isBlank()) {
+            return
         }
-
-        return try {
-            val process = ProcessBuilder(*command.split(" ").toTypedArray()).start()
-            val reader = BufferedReader(InputStreamReader(process.inputStream))
-            val output = reader.use { it.readText() }
-            val pingTime = if (System.getProperty("os.name").startsWith("Windows")) {
-                """时间=(\d+)ms""".toRegex().find(output)?.groups?.get(1)?.value
-            } else {
-                """time=(\d+) ms""".toRegex().find(output)?.groups?.get(1)?.value
-            }
-
-            pingTime
-        } catch (e: Exception) {
-            null
+        val bundleEvent = Bundle()
+        if (keyValue1 != null) {
+            bundleEvent.putString(key1, keyValue1.toString())
         }
+        if (keyValue2 != null) {
+            bundleEvent.putString(key2, keyValue2.toString())
+        }
+        if (keyValue3 != null) {
+            bundleEvent.putString(key3, keyValue3.toString())
+        }
+        if (keyValue4 != null) {
+            bundleEvent.putString(key4, keyValue4.toString())
+        }
+        FirebaseAnalytics.getInstance(appContext).logEvent(name, bundleEvent)
     }
-
 
     fun abcAsk(adWhere: String, id: String) {
         postPointData(

@@ -24,6 +24,7 @@ object VPNGet {
         }
         return jsonString
     }
+
     private fun getVpnDataIsRelease(): String {
         return if (BuildConfig.DEBUG) {
             "servicesJson.json"
@@ -31,6 +32,7 @@ object VPNGet {
             "servicesJsonRelease.json"
         }
     }
+
     fun getAllData(): MutableList<VpnServerBean>? {
         val allData = if (DataUser.ooo_tz.isNullOrBlank()) {
             getJsonDataFromAsset(ZZZ.appContext, getVpnDataIsRelease())
@@ -129,6 +131,8 @@ object VPNGet {
             .setPositiveButton("OK") { dialog: DialogInterface?, which: Int ->
                 dialog?.dismiss()
                 nextFun()
+                DataUpMix.postPointData("p_switch_server")
+
             }
             .setNegativeButton("Cancel") { dialog: DialogInterface?, which: Int ->
                 dialog?.dismiss()
@@ -155,5 +159,21 @@ object VPNGet {
 
     fun isVPNConnected(): Boolean {
         return ZZZ.saoState
+    }
+
+    fun getVpnModel(): String {
+        return when (DataUser.protocolValueKey) {
+            "1" -> "Auto"
+            "2" -> "ss"
+            "3" -> "open"
+            else -> "Auto"
+        }
+    }
+    fun getVpnConnectName(): String {
+        return if(isVPNConnected()){
+            "connect"
+        }else{
+            "disconnect"
+        }
     }
 }

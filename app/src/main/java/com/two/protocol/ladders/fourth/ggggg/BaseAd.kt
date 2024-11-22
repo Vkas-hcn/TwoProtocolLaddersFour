@@ -36,6 +36,7 @@ import com.two.protocol.ladders.fourth.uuuuii.zzzzzz.ZZ
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.text.SimpleDateFormat
 import java.util.Date
 
 
@@ -90,19 +91,26 @@ class BaseAd private constructor() {
 
     fun advertisementLoadingForest(context: Context) {
         if (isLoadingForest) {
-            Log.e(TAG, "${getInstanceName()}-The ad is loading and cannot be loaded again")
+            log( "${getInstanceName()}-The ad is loading and cannot be loaded again")
             return
         }
         if (!VPNGet.isVPNConnected()) {
-            Log.e(TAG, "${getInstanceName()}-The VPN is not connected, the ad cannot be loaded")
+            log( "${getInstanceName()}-The VPN is not connected, the ad cannot be loaded")
+            return
+        }
+        if (limitIsExceeded()) {
+            log("广告超限不在加载")
             return
         }
         val blacklistState = DataUser.blockAdBlacklist()
         if (blacklistState && (instanceName == "connect" || instanceName == "backEnd" || instanceName == "backList" || instanceName == "home")) {
-            Log.e(TAG, "黑名单屏蔽：${instanceName}广告，不加载")
+            log( "黑名单屏蔽：${instanceName}广告，不加载")
             return
         }
-
+        if (DataUser.bbb_admin == "2" && (instanceName == "connect" || instanceName == "backEnd" || instanceName == "home")) {
+            Log.e("TAG", "admin屏蔽${instanceName}广告")
+            return
+        }
         if (appAdDataForest == null) {
             isLoadingForest = true
             loadStartupPageAdvertisementForest(context, DataUser.getAdJson())
@@ -123,8 +131,7 @@ class BaseAd private constructor() {
 
 
     private fun loadStartupPageAdvertisementForest(context: Context, adData: ForestAdBean) {
-        Log.e(TAG, "${getInstanceName()}-Ads - start loading-id=${getLoadIdLog(adData)}")
-        DataUpMix.abcAsk(getInstanceName(),getLoadId(adData))
+        DataUpMix.abcAsk(getInstanceName(), getLoadId(adData))
         adLoaders[id]?.invoke(context, adData)
     }
 
@@ -162,47 +169,60 @@ class BaseAd private constructor() {
     }
 
 
-    private fun loadOpenAdForest(context: Context, adData: ForestAdBean) {
+    private fun loadOpenAdForest(context: Context, adData: ForestAdBean, currentIndex: Int = 0) {
+        val adIds = DataUser.getAdmobIdList(adData.open)
+        if (currentIndex >= adIds.size) {
+            if (!isFirstLoad) {
+                isFirstLoad = true
+                loadOpenAdForest(context, adData, 0)
+                return
+            }
+            getOpenInstance().isLoadingForest = false
+            log( "${getInstanceName()}-所有广告 ID 加载失败")
+            return
+        }
+
+        val currentAdId = adIds[currentIndex]
+        log( "${getInstanceName()}-开始加载广告 ID: $currentAdId")
+
         DataUser.openTypeIp = DataUser.connectIp
         adDataOpen = DataUpMix.beforeLoadLink(adData)
         val request = AdRequest.Builder().build()
         AppOpenAd.load(
             context,
-            adData.open,
+            currentAdId,
             request,
             AppOpenAd.APP_OPEN_AD_ORIENTATION_PORTRAIT,
             object : AppOpenAd.AppOpenAdLoadCallback() {
                 override fun onAdLoaded(ad: AppOpenAd) {
-                    Log.e(TAG, "open ads start loading success")
+                    log( "open ads start loading success")
                     getOpenInstance().isLoadingForest = false
                     getOpenInstance().appAdDataForest = ad
                     getOpenInstance().loadTimeForest = Date().time
-                    DataUpMix.abcGett(getInstanceName(),getLoadId(adData),getLoadIp())
+                    DataUpMix.abcGett(getInstanceName(), getLoadId(adData), getLoadIp())
                     ad.setOnPaidEventListener { adValue ->
-                            DataUpMix.postAdData(
-                                adValue,
-                                ad.responseInfo,
-                                adDataOpen!!,
-                                adData.open,
-                                "open",
-                                "open"
-                            )
+                        DataUpMix.postAdData(
+                            adValue,
+                            ad.responseInfo,
+                            adDataOpen!!,
+                            adData.open,
+                            "open",
+                            "open"
+                        )
                     }
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
                     getOpenInstance().isLoadingForest = false
                     getOpenInstance().appAdDataForest = null
-                    if (!isFirstLoad) {
-                        getOpenInstance().advertisementLoadingForest(context)
-                        isFirstLoad = true
-                    }
+
                     val error =
                         """
            domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}
           """"
-                    Log.e(TAG, "open ads start loading Failed=${error}")
-                    DataUpMix.abcAskdis(getInstanceName(),getLoadId(adData),getLoadIp(),error)
+                    log( "open ads start loading Failed=${error}")
+                    DataUpMix.abcAskdis(getInstanceName(), getLoadId(adData), getLoadIp(), error)
+                    loadOpenAdForest(context, adData, currentIndex + 1)
                 }
             }
         )
@@ -229,10 +249,12 @@ class BaseAd private constructor() {
                 override fun onAdShowedFullScreenContent() {
                     getOpenInstance().appAdDataForest = null
                     getOpenInstance().whetherToShowForest = true
+                    DataUser.local_s_n = (DataUser.local_s_n ?: 0) + 1
                 }
 
                 override fun onAdClicked() {
                     super.onAdClicked()
+                    DataUser.local_c_n = (DataUser.local_c_n ?: 0) + 1
                 }
             }
     }
@@ -262,38 +284,160 @@ class BaseAd private constructor() {
         advertisingOpenCallbackForest(fullScreenFun)
         (getOpenInstance().appAdDataForest as AppOpenAd).show(activity)
         adDataOpen = DataUpMix.afterLoadLink(adDataOpen!!)
-        DataUpMix.abcView(getInstanceName(),getLoadId(adDataOpen!!),getLoadIp())
+        DataUpMix.abcView(getInstanceName(), getLoadId(adDataOpen!!), getLoadIp())
         clearLoadIp()
         return true
     }
 
+    private fun loadNativeAdvertisement(
+        context: Context,
+        adData: ForestAdBean,
+        adBase: BaseAd?,
+        currentIndex: Int = 0
+    ) {
+        if (adBase == null) {
+            log( "adBase is null")
+            return
+        }
 
-    private fun loadIntAdvertisementForest(context: Context, adData: ForestAdBean, adBase: BaseAd) {
+        // 获取广告 ID 列表
+        val adIds = when (adBase) {
+            getHomeInstance() -> DataUser.getAdmobIdList(adData.mnnt)
+            getEndInstance() -> DataUser.getAdmobIdList(adData.rsnt)
+            else -> DataUser.getAdmobIdList(adData.mnnt)
+        }
+
+        // 检查广告 ID 列表有效性
+        if (adIds.isEmpty() || currentIndex >= adIds.size) {
+            adBase.isLoadingForest = false
+            log( "${adBase.getInstanceName()}-所有广告 ID 加载失败")
+            return
+        }
+
+        val currentAdId = adIds[currentIndex]
+        log( "${adBase.getInstanceName()}-开始加载广告 ID: $currentAdId")
+
+        // 设置 IP 和广告数据
+        when (adBase) {
+            getHomeInstance() -> {
+                DataUser.homeTypeIp = DataUser.connectIp
+                adDataHome = DataUpMix.beforeLoadLink(adData)
+            }
+
+            getEndInstance() -> {
+                DataUser.endTypeIp = DataUser.connectIp
+                adDataResult = DataUpMix.beforeLoadLink(adData)
+            }
+        }
+
+        try {
+            // 构建广告加载器
+            AdLoader.Builder(context.applicationContext, currentAdId)
+                .apply {
+                    withNativeAdOptions(
+                        NativeAdOptions.Builder()
+                            .setVideoOptions(VideoOptions.Builder().setStartMuted(true).build())
+                            .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_LEFT)
+                            .setMediaAspectRatio(NativeAdOptions.NATIVE_MEDIA_ASPECT_RATIO_PORTRAIT)
+                            .build()
+                    )
+
+                    forNativeAd {
+                        adBase.appAdDataForest = it
+                        log( "${adBase.getInstanceName()}-广告加载成功")
+                        DataUpMix.abcGett(getInstanceName(), getLoadId(adData), getLoadIp())
+
+                        it.setOnPaidEventListener { adValue ->
+                            getNatData(it, adValue, currentAdId, adBase)
+                            if (adBase == getHomeInstance()) {
+                                getHomeInstance().advertisementLoadingForest(context)
+                            }
+                        }
+                    }
+
+                    withAdListener(object : AdListener() {
+                        override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                            Log.e(
+                                TAG,
+                                "${adBase.getInstanceName()}-广告加载失败: ${loadAdError.message}"
+                            )
+                            adBase.isLoadingForest = false
+                            adBase.appAdDataForest = null
+                            DataUpMix.abcAskdis(
+                                getInstanceName(),
+                                getLoadId(adData),
+                                getLoadIp(),
+                                loadAdError.message
+                            )
+                            loadNativeAdvertisement(context, adData, adBase, currentIndex + 1)
+                        }
+
+                        override fun onAdLoaded() {
+                            adBase.loadTimeForest = Date().time
+                            adBase.isLoadingForest = false
+                        }
+                        override fun onAdClicked() {
+                            super.onAdClicked()
+                            log("点击原生广告")
+                            DataUser.local_c_n = (DataUser.local_c_n ?: 0) + 1
+                        }
+                    })
+                }
+                .build()
+                .loadAd(AdRequest.Builder().build())
+        } catch (e: Exception) {
+            log( "Error building AdLoader or AdRequest: ${e.message}")
+        }
+    }
+    private fun loadIntAdvertisementForest(
+        context: Context,
+        adData: ForestAdBean,
+        adBase: BaseAd?,
+        currentIndex: Int = 0
+    ) {
+        if (adBase == null) {
+            log( "adBase is null")
+            return
+        }
+
+        // 获取广告 ID 列表
+        val adIds = when (adBase) {
+            getConnectInstance() -> DataUser.getAdmobIdList(adData.ctint)
+            getBackEndInstance() -> DataUser.getAdmobIdList(adData.bcintres)
+            else -> DataUser.getAdmobIdList(adData.bcintserv)
+        }
+
+        // 检查广告 ID 列表有效性
+        if (adIds.isEmpty() || currentIndex >= adIds.size) {
+            adBase.isLoadingForest = false
+            log( "${adBase.getInstanceName()}-所有广告 ID 加载失败")
+            return
+        }
+
+        val currentAdId = adIds[currentIndex]
+        log( "${adBase.getInstanceName()}-开始加载广告 ID: $currentAdId")
+
         val adRequest = AdRequest.Builder().build()
-        var loadId = ""
         when (adBase) {
             getConnectInstance() -> {
                 DataUser.contTypeIp = DataUser.connectIp
-                loadId = adData.ctint
                 adDataCont = DataUpMix.beforeLoadLink(adData)
 
             }
 
             getBackEndInstance() -> {
                 DataUser.backEndTypeIp = DataUser.connectIp
-                loadId = adData.bcintres
                 adDataEnd = DataUpMix.beforeLoadLink(adData)
             }
 
             getBackListInstance() -> {
                 DataUser.backListTypeIp = DataUser.connectIp
-                loadId = adData.bcintserv
                 adDataList = DataUpMix.beforeLoadLink(adData)
             }
         }
         InterstitialAd.load(
             context,
-            loadId,
+            currentAdId,
             adRequest,
             object : InterstitialAdLoadCallback() {
                 override fun onAdFailedToLoad(adError: LoadAdError) {
@@ -303,17 +447,18 @@ class BaseAd private constructor() {
                         """
            domain: ${adError.domain}, code: ${adError.code}, message: ${adError.message}
           """
-                    Log.e(TAG, "${adBase.getInstanceName()}-The ad failed to load:$error ")
-                    DataUpMix.abcAskdis(getInstanceName(),getLoadId(adData),getLoadIp(),error)
+                    log( "${adBase.getInstanceName()}-The ad failed to load:$error ")
+                    DataUpMix.abcAskdis(getInstanceName(), getLoadId(adData), getLoadIp(), error)
+                    loadIntAdvertisementForest(context, adData, adBase, currentIndex + 1)
                 }
 
                 override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                    Log.e(TAG, "${adBase.getInstanceName()}-The ad loads successfully: ")
+                    log( "${adBase.getInstanceName()}-The ad loads successfully: ")
                     adBase.loadTimeForest = Date().time
                     adBase.isLoadingForest = false
                     adBase.appAdDataForest = interstitialAd
-                    DataUpMix.abcGett(getInstanceName(),getLoadId(adData),getLoadIp())
-                    getIntData(interstitialAd, loadId, adBase)
+                    DataUpMix.abcGett(getInstanceName(), getLoadId(adData), getLoadIp())
+                    getIntData(interstitialAd, currentAdId, adBase)
                 }
             })
     }
@@ -370,12 +515,14 @@ class BaseAd private constructor() {
         (adBase.appAdDataForest as? InterstitialAd)?.fullScreenContentCallback =
             object : FullScreenContentCallback() {
                 override fun onAdClicked() {
+                    DataUser.local_c_n = (DataUser.local_c_n ?: 0) + 1
                 }
 
                 override fun onAdDismissedFullScreenContent() {
                     adBase.appAdDataForest = null
                     adBase.whetherToShowForest = false
                     closeWindowFun()
+
                 }
 
                 override fun onAdFailedToShowFullScreenContent(p0: AdError) {
@@ -389,6 +536,7 @@ class BaseAd private constructor() {
                 override fun onAdShowedFullScreenContent() {
                     adBase.appAdDataForest = null
                     adBase.whetherToShowForest = true
+                    DataUser.local_s_n = (DataUser.local_s_n ?: 0) + 1
                 }
             }
     }
@@ -397,15 +545,18 @@ class BaseAd private constructor() {
         activity: AppCompatActivity,
         adBase: BaseAd
     ): Int {
-        if (!VPNGet.isVPNConnected()) {
+        if (!VPNGet.isVPNConnected() || getOpenInstance().limitIsExceeded()) {
             return 0
         }
         val blacklistState = DataUser.blockAdBlacklist()
         if (blacklistState && (adBase == getConnectInstance() || adBase == getBackEndInstance() || adBase == getBackListInstance() || adBase == getHomeInstance())) {
-            Log.e(TAG, "黑名单屏蔽：${adBase.getInstanceName()}广告，不显示")
+            log( "黑名单屏蔽：${adBase.getInstanceName()}广告，不显示")
             return 0
         }
-
+        if (DataUser.bbb_admin == "2" && (adBase == getConnectInstance() || adBase == getBackEndInstance() || adBase == getHomeInstance())) {
+            Log.e("TAG", "admin屏蔽${instanceName}广告")
+            return 0
+        }
         if (adBase.appAdDataForest == null) {
             return 1
         }
@@ -440,17 +591,17 @@ class BaseAd private constructor() {
                 when (adBase) {
                     getConnectInstance() -> {
                         adDataCont = DataUpMix.afterLoadLink(adDataCont!!)
-                        DataUpMix.abcView(getInstanceName(),getLoadId(adDataCont!!),getLoadIp())
+                        DataUpMix.abcView(getInstanceName(), getLoadId(adDataCont!!), getLoadIp())
                     }
 
                     getBackEndInstance() -> {
                         adDataEnd = DataUpMix.afterLoadLink(adDataEnd!!)
-                        DataUpMix.abcView(getInstanceName(),getLoadId(adDataEnd!!),getLoadIp())
+                        DataUpMix.abcView(getInstanceName(), getLoadId(adDataEnd!!), getLoadIp())
                     }
 
                     getBackListInstance() -> {
                         adDataList = DataUpMix.afterLoadLink(adDataList!!)
-                        DataUpMix.abcView(getInstanceName(),getLoadId(adDataList!!),getLoadIp())
+                        DataUpMix.abcView(getInstanceName(), getLoadId(adDataList!!), getLoadIp())
                     }
                 }
                 clearLoadIp()
@@ -473,76 +624,7 @@ class BaseAd private constructor() {
         }
     }
 
-    private fun loadNativeAdvertisement(context: Context, adData: ForestAdBean, adBase: BaseAd) {
-        var loadId = ""
-        when (adBase) {
-            getHomeInstance() -> {
-                DataUser.homeTypeIp = DataUser.connectIp
-                loadId = adData.mnnt
-                adDataHome = DataUpMix.beforeLoadLink(adData)
-            }
 
-            getEndInstance() -> {
-                DataUser.endTypeIp = DataUser.connectIp
-                loadId = adData.rsnt
-                adDataResult = DataUpMix.beforeLoadLink(adData)
-            }
-        }
-        Log.e(TAG, "loadNativeAdvertisement: $loadId")
-        val vpnNativeAds = AdLoader.Builder(
-            context.applicationContext,
-            loadId
-        )
-        val videoOptions = VideoOptions.Builder()
-            .setStartMuted(true)
-            .build()
-
-        val adOptions = NativeAdOptions.Builder()
-            .setVideoOptions(videoOptions)
-            .setAdChoicesPlacement(NativeAdOptions.ADCHOICES_TOP_LEFT)
-            .setMediaAspectRatio(NativeAdOptions.NATIVE_MEDIA_ASPECT_RATIO_PORTRAIT)
-            .build()
-
-        vpnNativeAds.withNativeAdOptions(adOptions)
-        vpnNativeAds.forNativeAd {
-            adBase.appAdDataForest = it
-            Log.e(TAG, "${adBase.getInstanceName()}- ad loads successfully")
-            DataUpMix.abcGett(getInstanceName(),getLoadId(adData),getLoadIp())
-            it.setOnPaidEventListener { adva ->
-                getNatData(it,adva, loadId, adBase)
-                if (adBase == getHomeInstance()) {
-                    getHomeInstance().advertisementLoadingForest(context)
-                }
-            }
-        }
-        vpnNativeAds.withAdListener(object : AdListener() {
-            override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                super.onAdFailedToLoad(loadAdError)
-                val error =
-                    """
-           domain: ${loadAdError.domain}, code: ${loadAdError.code}, message: ${loadAdError.message}
-          """"
-                Log.e(TAG, "${adBase.getInstanceName()}- ad failed to load:$error ")
-                adBase.isLoadingForest = false
-                adBase.appAdDataForest = null
-                DataUpMix.abcAskdis(getInstanceName(),getLoadId(adData),getLoadIp(),error)
-            }
-
-            override fun onAdLoaded() {
-                super.onAdLoaded()
-                adBase.loadTimeForest = Date().time
-                adBase.isLoadingForest = false
-            }
-
-            override fun onAdOpened() {
-                super.onAdOpened()
-            }
-
-            override fun onAdClicked() {
-                super.onAdClicked()
-            }
-        }).build().loadAd(AdRequest.Builder().build())
-    }
 
     private fun getNatData(ad: NativeAd, adValue: AdValue, loadId: String, adBase: BaseAd) {
         val bean = when (adBase) {
@@ -571,17 +653,17 @@ class BaseAd private constructor() {
                 ""
             }
         }
-            log("原生广告 -${adWhere}，开始上报: ")
-            ad.responseInfo?.let {
-                DataUpMix.postAdData(
-                    adValue,
-                    it,
-                    bean!!,
-                    loadId,
-                    adWhere,
-                    "native"
-                )
-            }
+        log("原生广告 -${adWhere}，开始上报: ")
+        ad.responseInfo?.let {
+            DataUpMix.postAdData(
+                adValue,
+                it,
+                bean!!,
+                loadId,
+                adWhere,
+                "native"
+            )
+        }
     }
 
     private fun setDisplayHomeNativeAdForest(activity: ZZ, adBase: BaseAd) {
@@ -604,12 +686,13 @@ class BaseAd private constructor() {
                         removeAllViews()
                         addView(adView)
                     }
-                    DataUpMix.abcView(getInstanceName(),getLoadId(adDataHome!!),getLoadIp())
+                    DataUpMix.abcView(getInstanceName(), getLoadId(adDataHome!!), getLoadIp())
                     activity.binding.imgOcAd.isVisible = false
                     activity.binding.adLayoutAdmob.isVisible = true
                     adBase.appAdDataForest = null
                     adBase.isLoadingForest = false
                     DataUser.homeTypeIp = ""
+                    DataUser.local_s_n = (DataUser.local_s_n ?: 0) + 1
                     adDataHome = DataUpMix.afterLoadLink(adDataHome!!)
 
                 }
@@ -636,7 +719,7 @@ class BaseAd private constructor() {
                         removeAllViews()
                         addView(adView)
                     }
-                    DataUpMix.abcView(getInstanceName(),getLoadId(adDataResult!!),getLoadIp())
+                    DataUpMix.abcView(getInstanceName(), getLoadId(adDataResult!!), getLoadIp())
                     activity.binding.imgOcAd.isVisible = false
                     activity.binding.adLayoutAdmob.isVisible = true
                     adBase.appAdDataForest = null
@@ -742,6 +825,7 @@ class BaseAd private constructor() {
             else -> ""
         }
     }
+
     private fun getLoadId(adBean: ForestAdBean): String {
         return when (id) {
             1 -> adBean.open
@@ -752,6 +836,62 @@ class BaseAd private constructor() {
             6 -> adBean.bcintserv
             else -> ""
         }
+    }
+
+    fun isAppOpenSameDayBa() {
+        if (DataUser.ad_load_date.isNullOrBlank()) {
+            DataUser.ad_load_date = formatDateNow()
+        } else {
+            if (dateAfterDate(DataUser.ad_load_date, formatDateNow())) {
+                DataUser.ad_load_date = formatDateNow()
+                log("超限-清除数据:")
+                DataUser.local_s_n = 0
+                DataUser.local_c_n = 0
+                DataUser.adLimState = ""
+            }
+        }
+    }
+
+    private fun formatDateNow(): String {
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val date = Date()
+        return simpleDateFormat.format(date)
+    }
+
+    private fun dateAfterDate(startTime: String?, endTime: String?): Boolean {
+        val format = SimpleDateFormat("yyyy-MM-dd")
+        try {
+            val startDate: Date = format.parse(startTime)
+            val endDate: Date = format.parse(endTime)
+            val start: Long = startDate.getTime()
+            val end: Long = endDate.getTime()
+            if (end > start) {
+                return true
+            }
+        } catch (e: Exception) {
+            return false
+        }
+        return false
+    }
+
+     fun limitIsExceeded(): Boolean {
+        isAppOpenSameDayBa()
+        val adOpenNum = DataUser.getAdJson().ffftt_skhjg
+        val adClickNum = DataUser.getAdJson().ffftt_csadf
+        val currentOpenCount = DataUser.local_s_n ?: 0
+        val currentClickCount = DataUser.local_c_n ?: 0
+        if (currentOpenCount >= adOpenNum && DataUser.adLimState != "limit") {
+            adUpperLimitAdPointData("show")
+        }
+        if (currentClickCount >= adClickNum && DataUser.adLimState != "limit") {
+            adUpperLimitAdPointData("click")
+        }
+        return (currentOpenCount >= adOpenNum) || (currentClickCount >= adClickNum)
+    }
+
+    private fun adUpperLimitAdPointData(showType: String) {
+        DataUser.adLimState = "limit"
+        DataUpMix.postPointData("abc_limit", "type", showType)
     }
 }
 

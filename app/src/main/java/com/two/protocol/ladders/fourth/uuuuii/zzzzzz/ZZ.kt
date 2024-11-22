@@ -95,6 +95,7 @@ class ZZ : AppCompatActivity(),
         backFun()
         showHomeAd()
         NetOnInfo.showDueDialog(this)
+        DataUpMix.postPointData("p_home_view")
     }
 
     private fun intVpn() {
@@ -159,6 +160,7 @@ class ZZ : AppCompatActivity(),
         }
         binding.imgConnect.setOnClickListener {
             activeTONextVpn()
+            DataUpMix.postPointData("p_home_click")
         }
 
         binding.tvAuto.setOnClickListener {
@@ -172,6 +174,8 @@ class ZZ : AppCompatActivity(),
                 }
                 setShowProtocol(1)
             }
+            DataUpMix.postPointData("p_home_protocol","type",VPNGet.getVpnModel())
+
         }
         binding.tvSs.setOnClickListener {
             limitClickActions {
@@ -184,6 +188,7 @@ class ZZ : AppCompatActivity(),
                 }
                 setShowProtocol(2)
             }
+            DataUpMix.postPointData("p_home_protocol","type",VPNGet.getVpnModel())
         }
         binding.tvOpen.setOnClickListener {
             limitClickActions {
@@ -196,6 +201,7 @@ class ZZ : AppCompatActivity(),
                 }
                 setShowProtocol(3)
             }
+            DataUpMix.postPointData("p_home_protocol","type",VPNGet.getVpnModel())
         }
     }
 
@@ -230,7 +236,11 @@ class ZZ : AppCompatActivity(),
     }
 
     private fun activeTONextVpn() {
+        if (!ZZZ.saoState) {
+            DataUpMix.postPointData("c_all_connect", "type", "open")
+        }
         if (VPNGet.isNetworkConnected(this)) {
+            DataUpMix.postPointData("u_no_network")
             return
         }
         lifecycleScope.launch(Dispatchers.IO) {
@@ -242,6 +252,8 @@ class ZZ : AppCompatActivity(),
         if (checkVPNPermission()) {
             startCountdown()
         } else {
+            DataUpMix.postPointData("c_vpnper_view")
+
             VpnService.prepare(this).let {
                 requestPermissionForResultVPN.launch(it)
             }
@@ -281,6 +293,7 @@ class ZZ : AppCompatActivity(),
                 showConnectAd(false) {
                     disConnectHowVpn()
                 }
+                DataUpMix.postPointData("c_all_disconnect")
             }
         }
     }
@@ -291,10 +304,10 @@ class ZZ : AppCompatActivity(),
             DataUser.connectIp = connectNowVpn.ip
             DataUser.connectCity = connectNowVpn.city
             Core.startService()
-            DataUpMix.postPointData("c_real_connect", "type", "ss")
+            DataUpMix.postPointData("c_real_connect", "type", "ss", "IP", DataUser.connectIp)
         } else {
             openVTool()
-            DataUpMix.postPointData("c_real_connect", "type", "open")
+            DataUpMix.postPointData("c_real_connect", "type", "open", "IP", DataUser.connectIp)
         }
     }
 
@@ -319,7 +332,7 @@ class ZZ : AppCompatActivity(),
         if (state.name == "Connected") {
             ZZZ.saoState = true
             connectSuccessFun()
-            DataUpMix.postPointData("c_su_connet", "type", "ss")
+            DataUpMix.postPointData("c_su_connet", "type", "ss", "IP", DataUser.connectIp)
         }
         if (state.name == "Stopped") {
             disConnectEndPage()
@@ -349,7 +362,7 @@ class ZZ : AppCompatActivity(),
                     "CONNECTED" -> {
                         ZZZ.saoState = true
                         connectSuccessFun()
-                        DataUpMix.postPointData("c_su_connet", "type", "open")
+                        DataUpMix.postPointData("c_su_connet", "type", "open", "IP", DataUser.connectIp)
                     }
 
                     "CONNECTING" -> {
@@ -383,6 +396,7 @@ class ZZ : AppCompatActivity(),
 
     private fun requestPermissionForResult(result: ActivityResult) {
         if (result.resultCode == RESULT_OK) {
+            DataUpMix.postPointData("c_vpnper_get")
             activeTONextVpn()
         } else {
             Toast.makeText(
@@ -666,7 +680,7 @@ class ZZ : AppCompatActivity(),
         showHomeJob?.cancel()
         showHomeJob = null
         val baseAd = BaseAd.getHomeInstance()
-        if (DataUser.blockAdBlacklist()) {
+        if (DataUser.blockAdBlacklist()|| DataUser.bbb_admin == "2") {
             binding.adLayout.isVisible = false
             return
         }

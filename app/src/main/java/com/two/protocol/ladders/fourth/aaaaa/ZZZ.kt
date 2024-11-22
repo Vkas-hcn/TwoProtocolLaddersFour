@@ -23,9 +23,11 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.ktx.initialize
 import com.two.protocol.ladders.fourth.BuildConfig
+import com.two.protocol.ladders.fourth.ggggg.BaseAd
 import com.two.protocol.ladders.fourth.uuutt.DataUpMix
 import com.two.protocol.ladders.fourth.uuutt.DataUpMix.log
 import com.two.protocol.ladders.fourth.uuutt.DataUser
+import com.two.protocol.ladders.fourth.uuutt.GetAdminNetData
 import com.two.protocol.ladders.fourth.uuutt.NetOnInfo
 import com.two.protocol.ladders.fourth.uuuuii.gggguu.GG
 import com.two.protocol.ladders.fourth.uuuuii.zzzzzz.ZZ
@@ -45,7 +47,7 @@ class ZZZ : Application(), Application.ActivityLifecycleCallbacks, LifecycleObse
         var nowVpnUI = 0
         var isInBackground = false
         var nowAName: String? = null
-
+        var startAppTime:Long = 0
     }
 
     var adActivity: Activity? = null
@@ -60,10 +62,11 @@ class ZZZ : Application(), Application.ActivityLifecycleCallbacks, LifecycleObse
         registerActivityLifecycleCallbacks(this)
         ProcessLifecycleOwner.get().lifecycle.addObserver(this)
         if (isMainProcess(this)) {
+            BaseAd.getOpenInstance().isAppOpenSameDayBa()
+            startAppTime = System.currentTimeMillis()
             CoroutineScope(Dispatchers.IO).launch {
                 NetOnInfo.getIPInfo()
                 NetOnInfo.getBlackList(this@ZZZ)
-                RRRRDDDT()
                 withContext(Dispatchers.Main){
                     initAdJust()
                 }
@@ -151,32 +154,6 @@ class ZZZ : Application(), Application.ActivityLifecycleCallbacks, LifecycleObse
         startActivity(intent)
         activity.finish()
     }
-
-    private fun RRRRDDDT() {
-        runCatching {
-            val referrerClient = InstallReferrerClient.newBuilder(this).build()
-            referrerClient.startConnection(object : InstallReferrerStateListener {
-                override fun onInstallReferrerSetupFinished(p0: Int) {
-                    when (p0) {
-                        InstallReferrerClient.InstallReferrerResponse.OK -> {
-                            referrerClient.installReferrer?.run {
-                                if (DataUser.installUpState != "1") {
-                                    log("onInstallReferrerSetupFinished: ")
-                                    DataUpMix.postInstallJson(this)
-                                }
-                            }
-                        }
-                    }
-                    referrerClient.endConnection()
-                }
-
-                override fun onInstallReferrerServiceDisconnected() {
-                }
-            })
-        }.onFailure { e ->
-        }
-    }
-
     private fun initAdJust() {
         Adjust.addSessionCallbackParameter(
             "customer_user_id",

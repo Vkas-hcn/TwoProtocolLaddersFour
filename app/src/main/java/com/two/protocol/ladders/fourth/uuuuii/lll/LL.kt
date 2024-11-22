@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.two.protocol.ladders.fourth.databinding.ActivityFirstBinding
 import com.two.protocol.ladders.fourth.databinding.ActivityListBinding
 import com.two.protocol.ladders.fourth.ggggg.BaseAd
+import com.two.protocol.ladders.fourth.uuutt.DataUpMix
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.VPNGet
 import com.two.protocol.ladders.fourth.uuutt.VpnServerBean
@@ -34,6 +35,7 @@ class LL : AppCompatActivity() {
         setContentView(binding.root)
         initAdapter()
         clickFun()
+        DataUpMix.postPointData("p_list_view","state",VPNGet.getVpnConnectName())
     }
 
     private fun initAdapter() {
@@ -70,6 +72,7 @@ class LL : AppCompatActivity() {
     private fun showBackAd(nextFun: () -> Unit) {
         backJob?.cancel()
         backJob = null
+        DataUpMix.postPointData("p_list_back")
         val baseAd = BaseAd.getBackListInstance()
         backJob = lifecycleScope.launch(Dispatchers.Main) {
             if (baseAd.canShowAd(this@LL, baseAd) == 0) {

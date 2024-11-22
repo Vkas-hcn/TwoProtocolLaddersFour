@@ -4,6 +4,9 @@ import androidx.annotation.Keep
 
 @Keep
 data class ForestAdBean(
+    val ffftt_skhjg:Int,
+    val ffftt_csadf:Int,
+
     val open: String,
     val mnnt: String,
     val rsnt: String,

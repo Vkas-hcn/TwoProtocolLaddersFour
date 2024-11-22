@@ -20,6 +20,7 @@ import com.two.protocol.ladders.fourth.databinding.ActivityFirstBinding
 import com.two.protocol.ladders.fourth.databinding.ActivityGoBinding
 import com.two.protocol.ladders.fourth.databinding.ActivityListBinding
 import com.two.protocol.ladders.fourth.ggggg.BaseAd
+import com.two.protocol.ladders.fourth.uuutt.DataUpMix
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.DataUser.getSaturnImage
 import com.two.protocol.ladders.fourth.uuutt.GlobalTimer
@@ -63,6 +64,8 @@ class EE : AppCompatActivity() {
             putExtra("end", "end")
         }
         setResult(Activity.RESULT_OK, data)
+
+
     }
 
     private fun initState() {
@@ -85,11 +88,13 @@ class EE : AppCompatActivity() {
             DataUser.nowServiceKey = DataUser.chooneServiceKey
             DataUser.chooneServiceKey = ""
         }
+        DataUpMix.postPointData("p_result_view","type",VPNGet.getVpnConnectName())
     }
 
     private fun showBackAd(nextFun: () -> Unit) {
         backJob?.cancel()
         backJob = null
+        DataUpMix.postPointData("p_result_back","type",VPNGet.getVpnConnectName())
         val baseAd = BaseAd.getBackEndInstance()
         backJob = lifecycleScope.launch(Dispatchers.Main) {
             if (baseAd.canShowAd(this@EE, baseAd) == 0) {

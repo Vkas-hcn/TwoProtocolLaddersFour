@@ -15,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import com.android.installreferrer.api.InstallReferrerClient
+import com.android.installreferrer.api.InstallReferrerStateListener
 import com.facebook.FacebookSdk
 import com.facebook.appevents.AppEventsLogger
 import com.google.android.ump.ConsentDebugSettings
@@ -30,8 +32,10 @@ import com.two.protocol.ladders.fourth.ggggg.BaseAd
 import com.two.protocol.ladders.fourth.uuutt.DataUpMix
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.DataUser.getLogicJson
+import com.two.protocol.ladders.fourth.uuutt.GetAdminNetData
 import com.two.protocol.ladders.fourth.uuutt.VPNGet
 import com.two.protocol.ladders.fourth.uuuuii.zzzzzz.ZZ
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
@@ -53,6 +57,7 @@ class GG : AppCompatActivity() {
         updateUserOpinions()
         initTime()
         lifecycleScope.launch(Dispatchers.IO) {
+            rrrrrData()
             DataUpMix.postSessionData()
         }
         onBackPressedDispatcher.addCallback(this) {
@@ -136,13 +141,14 @@ class GG : AppCompatActivity() {
         BaseAd.getConnectInstance().advertisementLoadingForest(this)
     }
 
-    private fun ccc(){
+    private fun ccc() {
         if (VPNGet.isVPNConnected()) {
             loadOpenAd()
         } else {
             checkData()
         }
     }
+
     private fun connectToVPNFun() {
         if (DataUser.cmpState == "1") {
             ccc()
@@ -190,12 +196,12 @@ class GG : AppCompatActivity() {
         jobOpenAdsForest?.cancel()
         jobOpenAdsForest = null
         jobOpenAdsForest = lifecycleScope.launch {
-            if (!VPNGet.isVPNConnected()) {
+            if (!VPNGet.isVPNConnected() || BaseAd.getOpenInstance().limitIsExceeded()) {
                 finishOpenAd()
                 return@launch
             }
             try {
-                withTimeout(10000L) {
+                withTimeout(12000L) {
                     while (isActive) {
                         val showState = BaseAd.getOpenInstance()
                             .displayOpenAdvertisementForest(this@GG, fullScreenFun = {
@@ -263,4 +269,36 @@ class GG : AppCompatActivity() {
             }
         )
     }
+    private fun rrrrrData() {
+        runCatching {
+            val referrerClient = InstallReferrerClient.newBuilder(this).build()
+            referrerClient.startConnection(object : InstallReferrerStateListener {
+                override fun onInstallReferrerSetupFinished(p0: Int) {
+                    when (p0) {
+                        InstallReferrerClient.InstallReferrerResponse.OK -> {
+                            DataUser.refData = referrerClient.installReferrer.toString()
+                            val timeElapsed =
+                                ((System.currentTimeMillis() - ZZZ.startAppTime) / 1000).toInt()
+                            DataUpMix.postPointData("u_rf","time",timeElapsed)
+                            CoroutineScope(Dispatchers.IO).launch {
+                                GetAdminNetData.getAdminData()
+                            }
+                            referrerClient.installReferrer?.run {
+                                if (DataUser.installUpState != "1") {
+                                    DataUpMix.log("onInstallReferrerSetupFinished: ")
+                                    DataUpMix.postInstallJson(this)
+                                }
+                            }
+                        }
+                    }
+                    referrerClient.endConnection()
+                }
+
+                override fun onInstallReferrerServiceDisconnected() {
+                }
+            })
+        }.onFailure { e ->
+        }
+    }
+
 }
