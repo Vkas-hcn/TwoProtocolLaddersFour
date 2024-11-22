@@ -26,6 +26,7 @@ import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdOptions
 import com.google.android.gms.ads.nativead.NativeAdView
 import com.two.protocol.ladders.fourth.R
+import com.two.protocol.ladders.fourth.aaaaa.ZZZ
 import com.two.protocol.ladders.fourth.uuutt.DataUpMix
 import com.two.protocol.ladders.fourth.uuutt.DataUpMix.log
 import com.two.protocol.ladders.fourth.uuutt.DataUser
@@ -255,6 +256,7 @@ class BaseAd private constructor() {
                 override fun onAdClicked() {
                     super.onAdClicked()
                     DataUser.local_c_n = (DataUser.local_c_n ?: 0) + 1
+                    ZZZ.clickAdZZ = true
                 }
             }
     }
@@ -380,6 +382,7 @@ class BaseAd private constructor() {
                             super.onAdClicked()
                             log("点击原生广告")
                             DataUser.local_c_n = (DataUser.local_c_n ?: 0) + 1
+                            ZZZ.clickAdZZ = true
                         }
                     })
                 }
@@ -516,6 +519,7 @@ class BaseAd private constructor() {
             object : FullScreenContentCallback() {
                 override fun onAdClicked() {
                     DataUser.local_c_n = (DataUser.local_c_n ?: 0) + 1
+                    ZZZ.clickAdZZ = true
                 }
 
                 override fun onAdDismissedFullScreenContent() {

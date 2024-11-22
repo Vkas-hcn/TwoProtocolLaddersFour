@@ -135,9 +135,9 @@ object NetOnInfo {
     }
 
     fun showDueDialog(context: Context): Boolean {
-//        if (BuildConfig.DEBUG) {
-//            return false
-//        }
+        if (BuildConfig.DEBUG) {
+            return false
+        }
         if (shouldIntercept(context)) {
             DataUpMix.postPointData("u_area_limit", "cy", DataUser.codeConKey)
             AlertDialog.Builder(context).apply {
@@ -171,8 +171,7 @@ object NetOnInfo {
             "frazzle" to "com.forest.stable.game.video.fast.easy",
             "schism" to "shoshone",
             "brandt" to getAppVersion().orEmpty(),
-            "dedicate" to DataUser.postUUID,
-            "commerce" to System.currentTimeMillis()
+            "dedicate" to DataUser.postUUID
         )
     }
 

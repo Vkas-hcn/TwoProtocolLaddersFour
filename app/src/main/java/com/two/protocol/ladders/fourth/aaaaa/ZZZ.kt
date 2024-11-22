@@ -48,6 +48,7 @@ class ZZZ : Application(), Application.ActivityLifecycleCallbacks, LifecycleObse
         var isInBackground = false
         var nowAName: String? = null
         var startAppTime:Long = 0
+        var clickAdZZ = false
     }
 
     var adActivity: Activity? = null

@@ -131,7 +131,6 @@ object VPNGet {
             .setPositiveButton("OK") { dialog: DialogInterface?, which: Int ->
                 dialog?.dismiss()
                 nextFun()
-                DataUpMix.postPointData("p_switch_server")
 
             }
             .setNegativeButton("Cancel") { dialog: DialogInterface?, which: Int ->

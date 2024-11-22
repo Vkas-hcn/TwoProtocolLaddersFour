@@ -71,7 +71,6 @@ class ZZ : AppCompatActivity(),
     private var showConnectJob: Job? = null
     private var showHomeJob: Job? = null
 
-
     val listPage =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -95,7 +94,6 @@ class ZZ : AppCompatActivity(),
         backFun()
         showHomeAd()
         NetOnInfo.showDueDialog(this)
-        DataUpMix.postPointData("p_home_view")
     }
 
     private fun intVpn() {
@@ -157,10 +155,10 @@ class ZZ : AppCompatActivity(),
         }
         binding.imgDisconnect.setOnClickListener {
             activeTONextVpn()
+            DataUpMix.postPointData("p_home_click")
         }
         binding.imgConnect.setOnClickListener {
             activeTONextVpn()
-            DataUpMix.postPointData("p_home_click")
         }
 
         binding.tvAuto.setOnClickListener {
@@ -433,6 +431,8 @@ class ZZ : AppCompatActivity(),
             binding.tvSpeedUp.text = "0 bit/s"
         }
         initializeServerData()
+        DataUpMix.postPointData("p_home_view")
+        ZZZ.clickAdZZ = false
     }
 
 
@@ -441,7 +441,9 @@ class ZZ : AppCompatActivity(),
         if (isConnecting()) {
             stopConnect = true
             setTypeService(0)
-            ZZZ.saoClick = -1
+            if(!ZZZ.clickAdZZ){
+                ZZZ.saoClick = -1
+            }
             mService?.disconnect()
             Core.stopService()
         }

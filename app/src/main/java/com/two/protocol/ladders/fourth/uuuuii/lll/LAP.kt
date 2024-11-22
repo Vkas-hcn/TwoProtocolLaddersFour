@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
 import com.two.protocol.ladders.fourth.R
 import com.two.protocol.ladders.fourth.aaaaa.ZZZ
+import com.two.protocol.ladders.fourth.uuutt.DataUpMix
 import com.two.protocol.ladders.fourth.uuutt.DataUser
 import com.two.protocol.ladders.fourth.uuutt.DataUser.getSaturnImage
 import com.two.protocol.ladders.fourth.uuutt.VpnServerBean
@@ -65,6 +66,7 @@ class LAP(private val vpnList: List<VpnServerBean>, private val activity: LL) :
     private fun clickFun(jsonBean: VpnServerBean) {
         if (ZZZ.saoState) {
             showDisConnectFun {
+                DataUpMix.postPointData("p_switch_server")
                 DataUser.chooneServiceKey = Gson().toJson(jsonBean)
                 endThisPage()
             }
