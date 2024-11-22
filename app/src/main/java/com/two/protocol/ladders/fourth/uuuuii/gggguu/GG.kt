@@ -269,6 +269,7 @@ class GG : AppCompatActivity() {
             }
         )
     }
+
     private fun rrrrrData() {
         runCatching {
             val referrerClient = InstallReferrerClient.newBuilder(this).build()
@@ -276,10 +277,10 @@ class GG : AppCompatActivity() {
                 override fun onInstallReferrerSetupFinished(p0: Int) {
                     when (p0) {
                         InstallReferrerClient.InstallReferrerResponse.OK -> {
-                            DataUser.refData = referrerClient.installReferrer.toString()
+                            DataUser.refData = referrerClient.installReferrer.installReferrer ?: ""
                             val timeElapsed =
                                 ((System.currentTimeMillis() - ZZZ.startAppTime) / 1000).toInt()
-                            DataUpMix.postPointData("u_rf","time",timeElapsed)
+                            DataUpMix.postPointData("u_rf", "time", timeElapsed)
                             CoroutineScope(Dispatchers.IO).launch {
                                 GetAdminNetData.getAdminData()
                             }

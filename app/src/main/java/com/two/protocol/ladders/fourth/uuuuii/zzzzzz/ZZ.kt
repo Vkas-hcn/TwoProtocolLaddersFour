@@ -237,7 +237,7 @@ class ZZ : AppCompatActivity(),
 
     private fun activeTONextVpn() {
         if (!ZZZ.saoState) {
-            DataUpMix.postPointData("c_all_connect", "type", "open")
+            DataUpMix.postPointData("c_all_connect", "type", VPNGet.getVpnModel())
         }
         if (VPNGet.isNetworkConnected(this)) {
             DataUpMix.postPointData("u_no_network")
