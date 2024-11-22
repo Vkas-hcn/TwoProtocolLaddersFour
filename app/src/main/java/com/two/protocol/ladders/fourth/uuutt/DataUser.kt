@@ -408,6 +408,8 @@ fun blockAdBlacklist(): Boolean {
     // 本地正式广告数据
     const val local_ad_data_formal = """
 {
+  "ffftt_skhjg":40,
+  "ffftt_csadf":2,
   "open": "ca-app-pub-8116342442786555/9926869240",
   "mnnt": "ca-app-pub-8116342442786555/9202813074",
   "rsnt": "ca-app-pub-8116342442786555/4762172475",
